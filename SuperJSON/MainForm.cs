@@ -17,7 +17,24 @@ namespace SuperJSON
         {
             InitializeComponent();
             CenterToScreen();
+            this.Text = "SuperJSON - "+ Application.ProductVersion;
             MatListBox.Items.Add("No JSON loaded");
+            MatListBox.Items.Add("-------------------------");
+            MatListBox.Items.Add("SuperJSON Made by:");
+            MatListBox.Items.Add("- Super Hackio");
+            MatListBox.Items.Add("With help from:");
+            MatListBox.Items.Add("- Gamma");
+            MatListBox.Items.Add("- Yoshi2");
+            MatListBox.Items.Add("- arookas");
+            MatListBox.Items.Add("- Riidefi");
+            MatListBox.Items.Add("- SY24");
+            MatListBox.Items.Add("-------------------------");
+            MatListBox.Items.Add("Found a bug?");
+            MatListBox.Items.Add("Let me know:");
+            MatListBox.Items.Add("> Github Issues Page");
+            MatListBox.Items.Add("> Discord Servers");
+            MatListBox.Items.Add("     -Super Hackio INC");
+            MatListBox.Items.Add("     -The Sunshine Hut");
             pictureboxs = new PictureBox[8] { Tex1PictureBox, Tex2PictureBox, Tex3PictureBox, Tex4PictureBox, Tex5PictureBox, Tex6PictureBox, Tex7PictureBox, Tex8PictureBox };
         }
 

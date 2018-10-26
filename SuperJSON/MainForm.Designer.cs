@@ -56,8 +56,12 @@
             this.KONSTNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.MatColGroupBox = new System.Windows.Forms.GroupBox();
             this.MatColTextBox = new System.Windows.Forms.TextBox();
+            this.AddMatColButton = new System.Windows.Forms.Button();
+            this.RemoveMatColButton = new System.Windows.Forms.Button();
             this.AmbColGroupBox = new System.Windows.Forms.GroupBox();
             this.AmbColTextBox = new System.Windows.Forms.TextBox();
+            this.AddAmbColButton = new System.Windows.Forms.Button();
+            this.RemoveAmbColButton = new System.Windows.Forms.Button();
             this.TEVColGroupBox = new System.Windows.Forms.GroupBox();
             this.TEVColTextBox = new System.Windows.Forms.TextBox();
             this.KONSTColTextBox = new System.Windows.Forms.TextBox();
@@ -72,10 +76,6 @@
             this.Tex1PictureBox = new System.Windows.Forms.PictureBox();
             this.RemoveMatButton = new System.Windows.Forms.Button();
             this.AddMatButton = new System.Windows.Forms.Button();
-            this.AddMatColButton = new System.Windows.Forms.Button();
-            this.RemoveMatColButton = new System.Windows.Forms.Button();
-            this.AddAmbColButton = new System.Windows.Forms.Button();
-            this.RemoveAmbColButton = new System.Windows.Forms.Button();
             this.IndirectSettingsButton = new System.Windows.Forms.Button();
             this.TEVStagesButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TEVNumericUpDown)).BeginInit();
@@ -368,6 +368,28 @@
             this.MatColTextBox.Text = "RRGGBBAA";
             this.MatColTextBox.TextChanged += new System.EventHandler(this.MatColTextBox_TextChanged);
             // 
+            // AddMatColButton
+            // 
+            this.AddMatColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Add;
+            this.AddMatColButton.Enabled = false;
+            this.AddMatColButton.Location = new System.Drawing.Point(104, 21);
+            this.AddMatColButton.Name = "AddMatColButton";
+            this.AddMatColButton.Size = new System.Drawing.Size(16, 16);
+            this.AddMatColButton.TabIndex = 23;
+            this.AddMatColButton.UseVisualStyleBackColor = true;
+            this.AddMatColButton.Click += new System.EventHandler(this.AddMatColButton_Click);
+            // 
+            // RemoveMatColButton
+            // 
+            this.RemoveMatColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Remove;
+            this.RemoveMatColButton.Enabled = false;
+            this.RemoveMatColButton.Location = new System.Drawing.Point(126, 21);
+            this.RemoveMatColButton.Name = "RemoveMatColButton";
+            this.RemoveMatColButton.Size = new System.Drawing.Size(16, 16);
+            this.RemoveMatColButton.TabIndex = 24;
+            this.RemoveMatColButton.UseVisualStyleBackColor = true;
+            this.RemoveMatColButton.Click += new System.EventHandler(this.RemoveMatColButton_Click);
+            // 
             // AmbColGroupBox
             // 
             this.AmbColGroupBox.Controls.Add(this.AmbColTextBox);
@@ -392,6 +414,28 @@
             this.AmbColTextBox.TabIndex = 26;
             this.AmbColTextBox.Text = "RRGGBBAA";
             this.AmbColTextBox.TextChanged += new System.EventHandler(this.AmbColTextBox_TextChanged);
+            // 
+            // AddAmbColButton
+            // 
+            this.AddAmbColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Add;
+            this.AddAmbColButton.Enabled = false;
+            this.AddAmbColButton.Location = new System.Drawing.Point(104, 21);
+            this.AddAmbColButton.Name = "AddAmbColButton";
+            this.AddAmbColButton.Size = new System.Drawing.Size(16, 16);
+            this.AddAmbColButton.TabIndex = 28;
+            this.AddAmbColButton.UseVisualStyleBackColor = true;
+            this.AddAmbColButton.Click += new System.EventHandler(this.AddAmbColButton_Click);
+            // 
+            // RemoveAmbColButton
+            // 
+            this.RemoveAmbColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Remove;
+            this.RemoveAmbColButton.Enabled = false;
+            this.RemoveAmbColButton.Location = new System.Drawing.Point(126, 21);
+            this.RemoveAmbColButton.Name = "RemoveAmbColButton";
+            this.RemoveAmbColButton.Size = new System.Drawing.Size(16, 16);
+            this.RemoveAmbColButton.TabIndex = 29;
+            this.RemoveAmbColButton.UseVisualStyleBackColor = true;
+            this.RemoveAmbColButton.Click += new System.EventHandler(this.RemoveAmbColButton_Click);
             // 
             // TEVColGroupBox
             // 
@@ -566,50 +610,6 @@
             this.AddMatButton.TabIndex = 16;
             this.AddMatButton.UseVisualStyleBackColor = true;
             this.AddMatButton.Click += new System.EventHandler(this.AddMatButton_Click);
-            // 
-            // AddMatColButton
-            // 
-            this.AddMatColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Add;
-            this.AddMatColButton.Enabled = false;
-            this.AddMatColButton.Location = new System.Drawing.Point(104, 21);
-            this.AddMatColButton.Name = "AddMatColButton";
-            this.AddMatColButton.Size = new System.Drawing.Size(16, 16);
-            this.AddMatColButton.TabIndex = 23;
-            this.AddMatColButton.UseVisualStyleBackColor = true;
-            this.AddMatColButton.Click += new System.EventHandler(this.AddMatColButton_Click);
-            // 
-            // RemoveMatColButton
-            // 
-            this.RemoveMatColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Remove;
-            this.RemoveMatColButton.Enabled = false;
-            this.RemoveMatColButton.Location = new System.Drawing.Point(126, 21);
-            this.RemoveMatColButton.Name = "RemoveMatColButton";
-            this.RemoveMatColButton.Size = new System.Drawing.Size(16, 16);
-            this.RemoveMatColButton.TabIndex = 24;
-            this.RemoveMatColButton.UseVisualStyleBackColor = true;
-            this.RemoveMatColButton.Click += new System.EventHandler(this.RemoveMatColButton_Click);
-            // 
-            // AddAmbColButton
-            // 
-            this.AddAmbColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Add;
-            this.AddAmbColButton.Enabled = false;
-            this.AddAmbColButton.Location = new System.Drawing.Point(104, 21);
-            this.AddAmbColButton.Name = "AddAmbColButton";
-            this.AddAmbColButton.Size = new System.Drawing.Size(16, 16);
-            this.AddAmbColButton.TabIndex = 28;
-            this.AddAmbColButton.UseVisualStyleBackColor = true;
-            this.AddAmbColButton.Click += new System.EventHandler(this.AddAmbColButton_Click);
-            // 
-            // RemoveAmbColButton
-            // 
-            this.RemoveAmbColButton.BackgroundImage = global::SuperJSON.Properties.Resources.Remove;
-            this.RemoveAmbColButton.Enabled = false;
-            this.RemoveAmbColButton.Location = new System.Drawing.Point(126, 21);
-            this.RemoveAmbColButton.Name = "RemoveAmbColButton";
-            this.RemoveAmbColButton.Size = new System.Drawing.Size(16, 16);
-            this.RemoveAmbColButton.TabIndex = 29;
-            this.RemoveAmbColButton.UseVisualStyleBackColor = true;
-            this.RemoveAmbColButton.Click += new System.EventHandler(this.RemoveAmbColButton_Click);
             // 
             // IndirectSettingsButton
             // 

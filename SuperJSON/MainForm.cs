@@ -25,7 +25,6 @@ namespace SuperJSON
             MatListBox.Items.Add("With help from:");
             MatListBox.Items.Add("- Gamma");
             MatListBox.Items.Add("- Yoshi2");
-            MatListBox.Items.Add("- arookas");
             MatListBox.Items.Add("- Riidefi");
             MatListBox.Items.Add("- SY24");
             MatListBox.Items.Add("-------------------------");

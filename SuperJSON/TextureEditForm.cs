@@ -47,9 +47,36 @@ namespace SuperJSON
         List<TextureHeader> AddingTextureList;
         int SelectedMaterial;
         int SelectedTexture;
+        string oldname;
 
         public void SaveTextureHeader()
         {
+            oldname = TextureList[SelectedTexture].Name;
+            TextureList[SelectedTexture].Name = TexNameTextBox.Text;
+            var b = false;
+            var mcount = 0;
+            foreach (Material m in MaterialList)
+            {
+                for (var i = 0; i < 8; i++)
+                {
+                    foreach (TextureHeader th in TextureList)
+                    {
+                        if (TextureList[SelectedTexture].Name != m.Textures[i] && m.Textures[i] != null && m.Textures[i] == oldname)
+                        {
+                            m.Textures[i] = TextureList[SelectedTexture].Name;
+                            b = true;
+                            break;
+                        }
+                        if (b)
+                            break;
+                    }
+                    if (b)
+                        break;
+                }
+                if (b)
+                    break;
+                mcount++;
+            }
             TextureList[SelectedTexture].Name = TexNameTextBox.Text;
             TextureList[SelectedTexture].AlphaSetting = (int)AlphaNumericUpDown.Value;
             TextureList[SelectedTexture].AttachPalette = Convert.ToInt32(AttachPaletteCheckBox.Checked);
@@ -118,7 +145,7 @@ namespace SuperJSON
             if (e.CloseReason == CloseReason.WindowsShutDown) return;
             //---------------------------------------------------------------------------------------------------------------------------------------
             #region Saving
-
+            SaveTextureHeader();
             #endregion
             //---------------------------------------------------------------------------------------------------------------------------------------
             MainWindow.materials = MaterialList;
@@ -129,7 +156,6 @@ namespace SuperJSON
         private void TexNameTextBox_TextChanged(object sender, EventArgs e)
         {
             TexNameTextBox.Text = TexNameTextBox.Text.Replace(' ', '_');
-            TextureList[SelectedTexture].Name = TexNameTextBox.Text;
         }
 
         private void OpenTextureButton_Click(object sender, EventArgs e)
@@ -224,6 +250,7 @@ namespace SuperJSON
 
         private void SwitchRightButton_Click(object sender, EventArgs e)
         {
+            SaveTextureHeader();
             SelectedTexture++;
             if (SelectedTexture > TextureList.Count - 1)
             {
@@ -234,6 +261,7 @@ namespace SuperJSON
 
         private void SwitchLeftButton_Click(object sender, EventArgs e)
         {
+            SaveTextureHeader();
             SelectedTexture--;
             if (SelectedTexture < 0)
             {

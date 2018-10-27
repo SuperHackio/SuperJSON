@@ -666,8 +666,10 @@
             this.Controls.Add(this.MatColGroupBox);
             this.Controls.Add(this.AmbColGroupBox);
             this.Controls.Add(this.TEVColGroupBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "SuperJSON";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);

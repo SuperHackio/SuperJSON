@@ -93,12 +93,6 @@ namespace SuperJSON
                 {
                     SaveProgressBar.Increment(new Random().Next(1, 5));
                     MatListBox.Items.Add(material.Name);
-                    if (MatListBox.Items.Count >= 19)
-                    {
-                        MessageBox.Show("The maximum amount of Materials is 19.", "Error");
-                        AddMatButton.Enabled = false;
-                        break;
-                    }
                 }
                 working = false;
                 SetAppStatus(true);
@@ -117,7 +111,6 @@ namespace SuperJSON
                     OpenButton.Enabled = true;
                     return;
                 }
-                AddMatButton.Enabled = materials.Count < 19 ? true : false;
                 RemoveMatButton.Enabled = materials.Count > 1 ? true : false;
                 //---------------------------------------------------------------------------------------------------------------------------------------
                 var current = 0;
@@ -317,13 +310,6 @@ namespace SuperJSON
                         }
                     }
                     materials.AddRange(addingmaterials);
-                    if (materials.Count > 19)
-                    {
-                        for (int i = materials.Count; i < 19; i--)
-                        {
-                            materials.RemoveAt(i);
-                        }
-                    }
                 }
                 else
                 {
@@ -362,6 +348,8 @@ namespace SuperJSON
             KONSTColTextBox.Enabled = trigger;
             TEVStagesButton.Enabled = trigger;
             IndirectSettingsButton.Enabled = trigger;
+
+            AddMatButton.Enabled = trigger;
             foreach (var picturebox in pictureboxs)
             {
                 picturebox.Enabled = trigger;
@@ -369,12 +357,10 @@ namespace SuperJSON
             if (trigger)
             {
                 SaveProgressBar.Value = 0;
-                AddMatButton.Enabled = materials.Count < 19 ? true : false;
                 RemoveMatButton.Enabled = materials.Count > 1 ? true : false;
             }
             else
             {
-                AddMatButton.Enabled = false;
                 RemoveMatButton.Enabled = false;
             }
             SaveTimer.Start();
@@ -621,12 +607,6 @@ namespace SuperJSON
                 foreach (var material in addingmaterials)
                 {
                     MatListBox.Items.Add(material.Name);
-                    if (MatListBox.Items.Count >= 19)
-                    {
-                        MessageBox.Show("The maximum amount of Materials is 19.", "Error");
-                        AddMatButton.Enabled = false;
-                        break;
-                    }
                 }
                 RemoveMatButton.Enabled = true;
             }

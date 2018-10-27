@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TEVStageForm));
             this.TEVStagesGroupBox = new System.Windows.Forms.GroupBox();
+            this.TevDeleteButton = new System.Windows.Forms.Button();
+            this.TEVStageIDComboBox = new System.Windows.Forms.ComboBox();
+            this.InfoLabel = new System.Windows.Forms.Label();
             this.TEVAlphaGroupBox = new System.Windows.Forms.GroupBox();
             this.AlphaRegIDLabel = new System.Windows.Forms.Label();
             this.AlphaInALabel = new System.Windows.Forms.Label();
@@ -66,9 +69,6 @@
             this.ColOPLabel = new System.Windows.Forms.Label();
             this.ColInDLabel = new System.Windows.Forms.Label();
             this.ColOPComboBox = new System.Windows.Forms.ComboBox();
-            this.InfoLabel = new System.Windows.Forms.Label();
-            this.TEVStageIDComboBox = new System.Windows.Forms.ComboBox();
-            this.TevDeleteButton = new System.Windows.Forms.Button();
             this.TEVStagesGroupBox.SuspendLayout();
             this.TEVAlphaGroupBox.SuspendLayout();
             this.TEVColGroupBox.SuspendLayout();
@@ -87,6 +87,35 @@
             this.TEVStagesGroupBox.TabIndex = 26;
             this.TEVStagesGroupBox.TabStop = false;
             this.TEVStagesGroupBox.Text = "Tev Stage Data";
+            // 
+            // TevDeleteButton
+            // 
+            this.TevDeleteButton.Location = new System.Drawing.Point(201, 11);
+            this.TevDeleteButton.Name = "TevDeleteButton";
+            this.TevDeleteButton.Size = new System.Drawing.Size(75, 23);
+            this.TevDeleteButton.TabIndex = 32;
+            this.TevDeleteButton.Text = "Delete";
+            this.TevDeleteButton.UseVisualStyleBackColor = true;
+            this.TevDeleteButton.Click += new System.EventHandler(this.TevDeleteButton_Click);
+            // 
+            // TEVStageIDComboBox
+            // 
+            this.TEVStageIDComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TEVStageIDComboBox.FormattingEnabled = true;
+            this.TEVStageIDComboBox.Location = new System.Drawing.Point(74, 13);
+            this.TEVStageIDComboBox.Name = "TEVStageIDComboBox";
+            this.TEVStageIDComboBox.Size = new System.Drawing.Size(121, 21);
+            this.TEVStageIDComboBox.TabIndex = 29;
+            this.TEVStageIDComboBox.SelectedIndexChanged += new System.EventHandler(this.TEVStageIDComboBox_SelectedIndexChanged);
+            // 
+            // InfoLabel
+            // 
+            this.InfoLabel.AutoSize = true;
+            this.InfoLabel.Location = new System.Drawing.Point(6, 16);
+            this.InfoLabel.Name = "InfoLabel";
+            this.InfoLabel.Size = new System.Drawing.Size(62, 13);
+            this.InfoLabel.TabIndex = 31;
+            this.InfoLabel.Text = "TEV Stage:";
             // 
             // TEVAlphaGroupBox
             // 
@@ -448,42 +477,15 @@
             this.ColOPComboBox.Size = new System.Drawing.Size(121, 21);
             this.ColOPComboBox.TabIndex = 8;
             // 
-            // InfoLabel
-            // 
-            this.InfoLabel.AutoSize = true;
-            this.InfoLabel.Location = new System.Drawing.Point(6, 16);
-            this.InfoLabel.Name = "InfoLabel";
-            this.InfoLabel.Size = new System.Drawing.Size(62, 13);
-            this.InfoLabel.TabIndex = 31;
-            this.InfoLabel.Text = "TEV Stage:";
-            // 
-            // TEVStageIDComboBox
-            // 
-            this.TEVStageIDComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.TEVStageIDComboBox.FormattingEnabled = true;
-            this.TEVStageIDComboBox.Location = new System.Drawing.Point(74, 13);
-            this.TEVStageIDComboBox.Name = "TEVStageIDComboBox";
-            this.TEVStageIDComboBox.Size = new System.Drawing.Size(121, 21);
-            this.TEVStageIDComboBox.TabIndex = 29;
-            this.TEVStageIDComboBox.SelectedIndexChanged += new System.EventHandler(this.TEVStageIDComboBox_SelectedIndexChanged);
-            // 
-            // TevDeleteButton
-            // 
-            this.TevDeleteButton.Location = new System.Drawing.Point(201, 11);
-            this.TevDeleteButton.Name = "TevDeleteButton";
-            this.TevDeleteButton.Size = new System.Drawing.Size(75, 23);
-            this.TevDeleteButton.TabIndex = 32;
-            this.TevDeleteButton.Text = "Delete";
-            this.TevDeleteButton.UseVisualStyleBackColor = true;
-            this.TevDeleteButton.Click += new System.EventHandler(this.TevDeleteButton_Click);
-            // 
             // TEVStageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(459, 332);
             this.Controls.Add(this.TEVStagesGroupBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "TEVStageForm";
             this.Text = "SuperJSON - TEV Stage Manager";
             this.TEVStagesGroupBox.ResumeLayout(false);

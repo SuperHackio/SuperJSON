@@ -71,7 +71,9 @@
             this.Controls.Add(this.AddTextureSettingsButton);
             this.Controls.Add(this.InfoLabel);
             this.Controls.Add(this.TextureSettingsComboBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "SelectTextureForm";
             this.Text = "SuperJSON - Settings Selection";
             this.ResumeLayout(false);

@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IndirectForm));
             this.IndirectStagesGroupBox = new System.Windows.Forms.GroupBox();
+            this.MatNameTextBox = new System.Windows.Forms.TextBox();
+            this.SwitchLeftButton = new System.Windows.Forms.Button();
             this.IndirectMatrixGroupBox = new System.Windows.Forms.GroupBox();
             this.ZNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.ZLabel = new System.Windows.Forms.Label();
@@ -41,6 +43,7 @@
             this.ExponentNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.MatrixIDComboBox = new System.Windows.Forms.ComboBox();
             this.IndirectExponentLabel = new System.Windows.Forms.Label();
+            this.SwitchRightButton = new System.Windows.Forms.Button();
             this.IndirectTEVOrderGroupBox = new System.Windows.Forms.GroupBox();
             this.TevOrderClearButton = new System.Windows.Forms.Button();
             this.IndTexMapComboBox = new System.Windows.Forms.ComboBox();
@@ -56,6 +59,8 @@
             this.IndScaleSLabel = new System.Windows.Forms.Label();
             this.IndScaleComboBox = new System.Windows.Forms.ComboBox();
             this.IndGroupBox = new System.Windows.Forms.GroupBox();
+            this.StageAmountLabel = new System.Windows.Forms.Label();
+            this.IndStageNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.BumpAlphaComboBox = new System.Windows.Forms.ComboBox();
             this.BumpAlphaLabel = new System.Windows.Forms.Label();
             this.IndMatScaleComboBox = new System.Windows.Forms.ComboBox();
@@ -71,11 +76,6 @@
             this.AddPrevCheckBox = new System.Windows.Forms.CheckBox();
             this.UTCLODCheckBox = new System.Windows.Forms.CheckBox();
             this.IndStageSelectComboBox = new System.Windows.Forms.ComboBox();
-            this.SwitchLeftButton = new System.Windows.Forms.Button();
-            this.SwitchRightButton = new System.Windows.Forms.Button();
-            this.MatNameTextBox = new System.Windows.Forms.TextBox();
-            this.IndStageNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.StageAmountLabel = new System.Windows.Forms.Label();
             this.IndirectStagesGroupBox.SuspendLayout();
             this.IndirectMatrixGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ZNumericUpDown)).BeginInit();
@@ -103,6 +103,26 @@
             this.IndirectStagesGroupBox.TabIndex = 27;
             this.IndirectStagesGroupBox.TabStop = false;
             this.IndirectStagesGroupBox.Text = "Indirect Settings";
+            // 
+            // MatNameTextBox
+            // 
+            this.MatNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MatNameTextBox.Location = new System.Drawing.Point(361, 0);
+            this.MatNameTextBox.Name = "MatNameTextBox";
+            this.MatNameTextBox.ReadOnly = true;
+            this.MatNameTextBox.Size = new System.Drawing.Size(123, 20);
+            this.MatNameTextBox.TabIndex = 53;
+            this.MatNameTextBox.Text = "Material Name";
+            // 
+            // SwitchLeftButton
+            // 
+            this.SwitchLeftButton.BackgroundImage = global::SuperJSON.Properties.Resources.ArrowLeft;
+            this.SwitchLeftButton.Location = new System.Drawing.Point(490, 0);
+            this.SwitchLeftButton.Name = "SwitchLeftButton";
+            this.SwitchLeftButton.Size = new System.Drawing.Size(16, 16);
+            this.SwitchLeftButton.TabIndex = 52;
+            this.SwitchLeftButton.UseVisualStyleBackColor = true;
+            this.SwitchLeftButton.Click += new System.EventHandler(this.SwitchLeftButton_Click);
             // 
             // IndirectMatrixGroupBox
             // 
@@ -213,6 +233,16 @@
             this.IndirectExponentLabel.Size = new System.Drawing.Size(55, 13);
             this.IndirectExponentLabel.TabIndex = 0;
             this.IndirectExponentLabel.Text = "Exponent:";
+            // 
+            // SwitchRightButton
+            // 
+            this.SwitchRightButton.BackgroundImage = global::SuperJSON.Properties.Resources.ArrowRight;
+            this.SwitchRightButton.Location = new System.Drawing.Point(512, 0);
+            this.SwitchRightButton.Name = "SwitchRightButton";
+            this.SwitchRightButton.Size = new System.Drawing.Size(16, 16);
+            this.SwitchRightButton.TabIndex = 51;
+            this.SwitchRightButton.UseVisualStyleBackColor = true;
+            this.SwitchRightButton.Click += new System.EventHandler(this.SwitchRightButton_Click);
             // 
             // IndirectTEVOrderGroupBox
             // 
@@ -385,6 +415,28 @@
             this.IndGroupBox.TabStop = false;
             this.IndGroupBox.Text = "Indirect Stages";
             // 
+            // StageAmountLabel
+            // 
+            this.StageAmountLabel.AutoSize = true;
+            this.StageAmountLabel.Location = new System.Drawing.Point(177, 24);
+            this.StageAmountLabel.Name = "StageAmountLabel";
+            this.StageAmountLabel.Size = new System.Drawing.Size(97, 13);
+            this.StageAmountLabel.TabIndex = 18;
+            this.StageAmountLabel.Text = "Tev Stages to use:";
+            // 
+            // IndStageNumericUpDown
+            // 
+            this.IndStageNumericUpDown.Location = new System.Drawing.Point(280, 22);
+            this.IndStageNumericUpDown.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.IndStageNumericUpDown.Name = "IndStageNumericUpDown";
+            this.IndStageNumericUpDown.Size = new System.Drawing.Size(38, 20);
+            this.IndStageNumericUpDown.TabIndex = 17;
+            this.IndStageNumericUpDown.ValueChanged += new System.EventHandler(this.IndStageNumericUpDown_ValueChanged);
+            // 
             // BumpAlphaComboBox
             // 
             this.BumpAlphaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -531,65 +583,15 @@
             this.IndStageSelectComboBox.TabIndex = 6;
             this.IndStageSelectComboBox.SelectedIndexChanged += new System.EventHandler(this.IndStageSelectComboBox_SelectedIndexChanged);
             // 
-            // SwitchLeftButton
-            // 
-            this.SwitchLeftButton.BackgroundImage = global::SuperJSON.Properties.Resources.ArrowLeft;
-            this.SwitchLeftButton.Location = new System.Drawing.Point(490, 0);
-            this.SwitchLeftButton.Name = "SwitchLeftButton";
-            this.SwitchLeftButton.Size = new System.Drawing.Size(16, 16);
-            this.SwitchLeftButton.TabIndex = 52;
-            this.SwitchLeftButton.UseVisualStyleBackColor = true;
-            this.SwitchLeftButton.Click += new System.EventHandler(this.SwitchLeftButton_Click);
-            // 
-            // SwitchRightButton
-            // 
-            this.SwitchRightButton.BackgroundImage = global::SuperJSON.Properties.Resources.ArrowRight;
-            this.SwitchRightButton.Location = new System.Drawing.Point(512, 0);
-            this.SwitchRightButton.Name = "SwitchRightButton";
-            this.SwitchRightButton.Size = new System.Drawing.Size(16, 16);
-            this.SwitchRightButton.TabIndex = 51;
-            this.SwitchRightButton.UseVisualStyleBackColor = true;
-            this.SwitchRightButton.Click += new System.EventHandler(this.SwitchRightButton_Click);
-            // 
-            // MatNameTextBox
-            // 
-            this.MatNameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MatNameTextBox.Location = new System.Drawing.Point(361, 0);
-            this.MatNameTextBox.Name = "MatNameTextBox";
-            this.MatNameTextBox.ReadOnly = true;
-            this.MatNameTextBox.Size = new System.Drawing.Size(123, 20);
-            this.MatNameTextBox.TabIndex = 53;
-            this.MatNameTextBox.Text = "Material Name";
-            // 
-            // IndStageNumericUpDown
-            // 
-            this.IndStageNumericUpDown.Location = new System.Drawing.Point(280, 22);
-            this.IndStageNumericUpDown.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.IndStageNumericUpDown.Name = "IndStageNumericUpDown";
-            this.IndStageNumericUpDown.Size = new System.Drawing.Size(38, 20);
-            this.IndStageNumericUpDown.TabIndex = 17;
-            this.IndStageNumericUpDown.ValueChanged += new System.EventHandler(this.IndStageNumericUpDown_ValueChanged);
-            // 
-            // StageAmountLabel
-            // 
-            this.StageAmountLabel.AutoSize = true;
-            this.StageAmountLabel.Location = new System.Drawing.Point(177, 24);
-            this.StageAmountLabel.Name = "StageAmountLabel";
-            this.StageAmountLabel.Size = new System.Drawing.Size(97, 13);
-            this.StageAmountLabel.TabIndex = 18;
-            this.StageAmountLabel.Text = "Tev Stages to use:";
-            // 
             // IndirectForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(560, 328);
             this.Controls.Add(this.IndirectStagesGroupBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "IndirectForm";
             this.Text = "SuperJSON - Indirect Settings";
             this.IndirectStagesGroupBox.ResumeLayout(false);

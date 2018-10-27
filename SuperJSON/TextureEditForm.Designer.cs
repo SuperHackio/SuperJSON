@@ -354,7 +354,9 @@
             this.Controls.Add(this.OpenTextureButton);
             this.Controls.Add(this.TexNameTextBox);
             this.Controls.Add(this.TexNameLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "TextureEditForm";
             this.Text = "SuperJSON - Texture Settings";
             ((System.ComponentModel.ISupportInitialize)(this.AlphaNumericUpDown)).EndInit();

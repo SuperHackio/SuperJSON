@@ -241,7 +241,7 @@ namespace SuperJSON
                 SetAppStatus(true);
                 return;
             }
-
+            working = false;
             #region Texture Scanning
             for (int j = 0; j < MatListBox.Items.Count - 1; j++)
             {
@@ -269,85 +269,11 @@ namespace SuperJSON
 
             }
             #endregion
-
-            var SuperBMDpath = "";
-            ofd.Filter = "SuperBMD (SuperBMD.exe)|*SuperBMD.exe";
-            ofd.FilterIndex = 1;
-            ofd.FileName = "";
+            
             working = true;
-            ofd.ShowDialog();
-            if (ofd.FileName != "")
-            {
-                working = false;
-                SuperBMDpath = ofd.FileName;
-            }
-            else
-            {
-                working = false;
-                error = true;
-                MessageBox.Show("SuperBMD not selected!", "Warning!");
-                SetAppStatus(true);
-                return;
-            }
-
-            #region Check SuperBMD Version
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
-
-            cmd.StandardInput.WriteLine("\"" + SuperBMDpath + "\"" + " --version 1.3.6");
-            cmd.StandardInput.Flush();
-            cmd.StandardInput.Close();
-            cmd.WaitForExit();
-            var result = cmd.StandardOutput.ReadToEnd();
-            if (!result.Contains("VERSION: True"))
-            {
-                working = false;
-                error = true;
-                MessageBox.Show("You need SuperBMD Version 1.3.6 or higher to export with SuperJSON","Wrong Version alert!");
-                SetAppStatus(true);
-                return;
-            }
-            #endregion
-
-            var Modelpath = "";
-            ofd.Filter = "AutoDesk Filmbox (.fbx)|*.fbx";
-            ofd.FilterIndex = 1;
-            ofd.FileName = "";
-            working = true;
-            ofd.ShowDialog();
-            if (ofd.FileName != "")
-            {
-                working = false;
-                Modelpath = ofd.FileName;
-            }
-            else
-            {
-                working = false;
-                error = true;
-                MessageBox.Show("Model not selected!", "Warning!");
-                SetAppStatus(true);
-                return;
-            }
-            working = false;
+            new ExportForm(jsonpath,textpath).ShowDialog();
             MatListBox.SelectedIndex = 0;
-            cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.UseShellExecute = false;
-            cmd.Start();
-
-            cmd.StandardInput.WriteLine("\"" + SuperBMDpath + "\"" + " " + "\"" + Modelpath + "\"" + " --mat " + "\"" + jsonpath + "\"" + " --tex " + "\"" + textpath + "\"");
-            cmd.StandardInput.Flush();
-            cmd.StandardInput.Close();
-            cmd.WaitForExit();
-            MessageBox.Show(cmd.StandardOutput.ReadToEnd());
+            
             //END
             SetAppStatus(true);
             ReloadImages();

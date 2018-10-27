@@ -75,7 +75,7 @@ namespace SuperJSON
 
         private void FindInButton_Click(object sender, EventArgs e)
         {
-            ofd.Filter = "AutoDesk Filmbox (.fbx)|*.fbx|COLLAborative Design Activity (.dae)|*.dae|3ds Max 3DS (.3ds)|*.3ds|Wavefront Object (.obj)|*.obj";
+            ofd.Filter = "AutoDesk Filmbox (*.fbx)|*.fbx|COLLAborative Design Activity (*.dae)|*.dae|3ds Max 3DS (*.3ds)|*.3ds|Wavefront Object (*.obj)|*.obj";
             ofd.FilterIndex = 1;
             ofd.FileName = "";
             ofd.ShowDialog();

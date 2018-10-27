@@ -64,9 +64,8 @@ namespace SuperJSON
                 var result = cmd.StandardOutput.ReadToEnd();
                 if (!result.Contains("VERSION: True"))
                 {
-                    MessageBox.Show("You need SuperBMD Version 1.3.6 or higher to export with SuperJSON", "Wrong Version alert!");
+                    MessageBox.Show("SuperBMD Version 1.3.6 is a requirement for BDL Export and TextureHeader usage. If you don't have 1.3.6 you can still export, but Texture Headers will not be used and you cannot export to BDL.", "Wrong Version alert!");
                     ValidSuperBMD = false;
-                    return;
                 }
                 SuperBMDTextBox.Text = SuperBMDpath;
                 ValidSuperBMD = true;

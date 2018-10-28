@@ -58,9 +58,12 @@ namespace SuperJSON
         public int selectedmaterial = 0;
         public int selectedtexture = 0;
         public int cooldown = 0;
+        public int selectedtexheader = 0;
         public bool working = false;
         public bool error = false;
         public bool opening = false;
+        public bool makenew = false;
+        public bool returned = false;
         public string FilePath;
 
 
@@ -98,7 +101,6 @@ namespace SuperJSON
                 SetAppStatus(true);
                 try
                 {
-
                     MatListBox.SelectedIndex = 0;
                 }
                 catch (Exception)
@@ -126,6 +128,7 @@ namespace SuperJSON
                             texheader = JsonConvert.DeserializeObject<List<TextureHeader>>(json);
                             r.Close();
                         }
+                        
                         foreach (TextureHeader th in texheader)
                         {
                             if (th.Format == null)
@@ -175,6 +178,29 @@ namespace SuperJSON
                 {
                     SetBaseTexHead(current, contains);
                 }
+
+                #region Assign IDs to each texture
+                var IDCount = 0;
+                foreach (TextureHeader t in texheader)
+                {
+                    t.ID = IDCount;
+                    IDCount++;
+                }
+
+                foreach (Material mat in materials)
+                {
+                    foreach (TextureInfo texinfo in mat.Textures)
+                    {
+                        foreach (TextureHeader texhead in texheader)
+                        {
+                            if (texhead.Name == texinfo.Name)
+                            {
+                                texinfo.TextureHeaderID = texhead.ID;
+                            }
+                        }
+                    }
+                }
+                #endregion
             }
         }
 
@@ -242,16 +268,16 @@ namespace SuperJSON
                 {
                     try
                     {
-                        fs = new FileStream(sInfo.DirectoryName + "\\" + materials[j].Textures[i] + ".png", FileMode.Open, FileAccess.Read);
+                        fs = new FileStream(sInfo.DirectoryName + "\\" + materials[j].Textures[i].Name + ".png", FileMode.Open, FileAccess.Read);
                         fs.Close();
                         SaveProgressBar.Increment(5);
                     }
                     catch (FileNotFoundException)
                     {
-                        if (materials[j].Textures[i] != null)
+                        if (materials[j].Textures[i].Name != null)
                         {
                             error = true;
-                            MessageBox.Show(materials[j].Textures[i] + ".png Does not exist!", "Warning!");
+                            MessageBox.Show(materials[j].Textures[i].Name + ".png Does not exist!", "Warning!");
                             SetAppStatus(true);
                             return;
                         }
@@ -277,15 +303,15 @@ namespace SuperJSON
         {
             foreach (Material mat in materials)
             {
-                foreach (string texname in materials[current].Textures)
+                foreach (TextureInfo texname in materials[current].Textures)
                 {
                     if (texheader != null)
                     {
-                        contains = texheader.Any(p => p.Name == texname);
+                        contains = texheader.Any(p => p.Name == texname.Name);
                     }
                     if (texname != null && !contains)
                     {
-                        texheader.Add(new TextureHeader { AttachPalette = 0, Name = texname, Format = TextureFormat.CMPR.ToString(), AlphaSetting = 0, WrapS = TextureWrap.ClampToEdge.ToString(), WrapT = TextureWrap.ClampToEdge.ToString(), MinFilter = TextureMinFilter.Linear.ToString(), MagFilter = TextureMagFilter.Linear.ToString(), MinLod = 0, MaxLod = 0 });
+                        texheader.Add(new TextureHeader { AttachPalette = 0, Name = texname.Name, Format = TextureFormat.CMPR.ToString(), AlphaSetting = 0, WrapS = TextureWrap.ClampToEdge.ToString(), WrapT = TextureWrap.ClampToEdge.ToString(), MinFilter = TextureMinFilter.Linear.ToString(), MagFilter = TextureMagFilter.Linear.ToString(), MinLod = 0, MaxLod = 0 });
                     }
                 }
                 current++;
@@ -309,11 +335,31 @@ namespace SuperJSON
                             return;
                         }
                     }
+                    foreach (Material mat in addingmaterials)
+                    {
+                        mat.Textures = new TextureInfo[8];
+
+                        for (int i = 0; i < 8; i++)
+                        {
+                            mat.Textures[i] = new TextureInfo { Name = null, TextureHeaderID = -1 };
+                            mat.Textures[i].Name = mat.TextureInfo[i];
+                        }
+                    }
                     materials.AddRange(addingmaterials);
                 }
                 else
                 {
                     materials = JsonConvert.DeserializeObject<List<Material>>(json);
+                    foreach (Material mat in materials)
+                    {
+                        mat.Textures = new TextureInfo[8];
+
+                        for (int i = 0; i < 8; i++)
+                        {
+                            mat.Textures[i] = new TextureInfo { Name = null, TextureHeaderID = -1 };
+                            mat.Textures[i].Name = mat.TextureInfo[i];
+                        }
+                    }
                 }
                 r.Close();
             }
@@ -392,17 +438,17 @@ namespace SuperJSON
                 TexDisplay = Properties.Resources.NoTexture; //No Texture
                 try
                 {
-                    fs = new FileStream(FilePath + "\\" + materials[selectedmaterial].Textures[loadtextint] + ".png", FileMode.Open, FileAccess.Read);
+                    fs = new FileStream(FilePath + "\\" + materials[selectedmaterial].Textures[loadtextint].Name + ".png", FileMode.Open, FileAccess.Read);
                     TexDisplay = (Bitmap)Image.FromStream(fs);
                     fs.Close();
                     TexDisplay = ResizeImage(TexDisplay); // Shrink it
                 }
                 catch (FileNotFoundException)
                 {
-                    TexDisplay = materials[selectedmaterial].Textures[loadtextint] == null ? Properties.Resources.NoTexture : Properties.Resources.MissingTexture; //Missing Texture
+                    TexDisplay = materials[selectedmaterial].Textures[loadtextint].Name == null ? Properties.Resources.NoTexture : Properties.Resources.MissingTexture; //Missing Texture
                 }
                 picturebox.Image = TexDisplay;
-                if (materials[selectedmaterial].Textures[loadtextint] == null)
+                if (materials[selectedmaterial].Textures[loadtextint].Name == null)
                 {
                     if (lastint == -1)
                     {
@@ -418,7 +464,10 @@ namespace SuperJSON
                 pictureboxs[lastint].Enabled = true;
             }
 
-            if ((lastint != 0 && lastint != 8) && (pictureboxs[lastint - 1].Enabled == true && pictureboxs[lastint + 1].Enabled == true))
+            if (lastint == -1)
+                return;
+
+            if ((lastint != 0 && lastint != 7 && lastint != 8) && (pictureboxs[lastint - 1].Enabled == true && pictureboxs[lastint + 1].Enabled == true))
             {
                 quick = false;
                 startfrom = lastint;
@@ -435,13 +484,16 @@ namespace SuperJSON
                     for (int i = startfrom; i < 7; i++)
                     {
                         materials[selectedmaterial].Textures[i] = materials[selectedmaterial].Textures[i + 1];
+                        materials[selectedmaterial].TextureInfo[i] = materials[selectedmaterial].TextureInfo[i + 1];
                         materials[selectedmaterial].TexCoord1Gens[i] = materials[selectedmaterial].TexCoord1Gens[i + 1];
                         materials[selectedmaterial].TevOrders[i] = materials[selectedmaterial].TevOrders[i + 1];
                         materials[selectedmaterial].TexMatrix1[i] = materials[selectedmaterial].TexMatrix1[i + 1];
                         materials[selectedmaterial].TevStages[i] = materials[selectedmaterial].TevStages[i + 1];
                         materials[selectedmaterial].SwapModes[i] = materials[selectedmaterial].SwapModes[i + 1];
                     }
-                    materials[selectedmaterial].Textures[7] = null;
+                    materials[selectedmaterial].Textures[7].Name = null;
+                    materials[selectedmaterial].Textures[7].TextureHeaderID = -1;
+                    materials[selectedmaterial].TextureInfo[7] = null;
                     pictureboxs[0].Enabled = true;
                     ReloadImages(true);
                 }
@@ -1040,7 +1092,7 @@ namespace SuperJSON
 
         private void Tex1PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[0] != null)
+            if (materials[selectedmaterial].Textures[0].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex1PictureBox, "Right click to delete");
             }
@@ -1052,7 +1104,7 @@ namespace SuperJSON
 
         private void Tex2PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[1] != null)
+            if (materials[selectedmaterial].Textures[1].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex2PictureBox, "Right click to delete");
             }
@@ -1064,7 +1116,7 @@ namespace SuperJSON
 
         private void Tex3PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[2] != null)
+            if (materials[selectedmaterial].Textures[2].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex3PictureBox, "Right click to delete");
             }
@@ -1076,7 +1128,7 @@ namespace SuperJSON
 
         private void Tex4PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[3] != null)
+            if (materials[selectedmaterial].Textures[3].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex4PictureBox, "Right click to delete");
             }
@@ -1088,7 +1140,7 @@ namespace SuperJSON
 
         private void Tex5PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[4] != null)
+            if (materials[selectedmaterial].Textures[4].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex5PictureBox, "Right click to delete");
             }
@@ -1100,7 +1152,7 @@ namespace SuperJSON
 
         private void Tex6PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[5] != null)
+            if (materials[selectedmaterial].Textures[5].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex6PictureBox, "Right click to delete");
             }
@@ -1112,7 +1164,7 @@ namespace SuperJSON
 
         private void Tex7PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[6] != null)
+            if (materials[selectedmaterial].Textures[6].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex7PictureBox, "Right click to delete");
             }
@@ -1124,7 +1176,7 @@ namespace SuperJSON
 
         private void Tex8PictureBox_MouseHover(object sender, EventArgs e)
         {
-            if (materials[selectedmaterial].Textures[7] != null)
+            if (materials[selectedmaterial].Textures[7].Name != null)
             {
                 mouseToolTip.SetToolTip(Tex8PictureBox, "Right click to delete");
             }
@@ -1135,6 +1187,12 @@ namespace SuperJSON
         }
 
         #endregion
+
+        private bool CheckTexture()
+        {
+            new SelectHeaderForm(this,texheader).ShowDialog();
+            return makenew;
+        }
 
         private void DeleteTexture(int ButtonID)
         {
@@ -1149,55 +1207,74 @@ namespace SuperJSON
 
         private void DeleteCheck(int ButtonID)
         {
-            TextureHeader delet = null;
-            foreach (TextureHeader texhed in texheader)
+            int threatenedTexheader = materials[selectedmaterial].Textures[ButtonID].TextureHeaderID;
+            
+            materials[selectedmaterial].TextureInfo[ButtonID] = null;
+            
+            var count = -1;
+            foreach (TextureInfo ti in materials[selectedmaterial].Textures)
             {
-                for (int i = 0; i < materials[selectedmaterial].Textures.Length; i++)
+                if (ti.TextureHeaderID == threatenedTexheader)
                 {
-                    if (texhed.Name == materials[selectedmaterial].Textures[ButtonID])
-                    {
-                        materials[selectedmaterial].Textures[ButtonID] = null;
-                        foreach (Material m in materials)
-                        {
-                            for (int j = 0; j < m.Textures.Length; j++)
-                            {
-                                if (texhed.Name == m.Textures[j])
-                                {
-                                    return;
-                                }
-                            }
-                        }
-                        delet = texhed;
-                    }
+                    count++;
                 }
-
             }
-            texheader.Remove(delet);
+            if (count == 0)
+            {
+                texheader.RemoveAt(threatenedTexheader);
+            }
+
+            materials[selectedmaterial].Textures[ButtonID].Name = null;
+            materials[selectedmaterial].Textures[ButtonID].TextureHeaderID = -1;
+
         }
 
         private void LoadTexEditor(int buttonID)
         {
-            if (materials[selectedmaterial].Textures[buttonID] == null)
+            if (materials[selectedmaterial].Textures[buttonID].Name == null)
             {
-                if (materials[selectedmaterial].Textures[buttonID] == null)
+                materials[selectedmaterial].TexCoord1Gens[buttonID] = Presets.Presets.BaseTexCoor1Gen;
+                materials[selectedmaterial].TevOrders[buttonID] = Presets.Presets.BaseTevOrder;
+                materials[selectedmaterial].TexMatrix1[buttonID] = Presets.Presets.BaseTexMatrix;
+                materials[selectedmaterial].SwapModes[buttonID] = Presets.Presets.BaseSwapMode;
+                if (buttonID == 0)
                 {
-                    materials[selectedmaterial].TexCoord1Gens[buttonID] = Presets.Presets.BaseTexCoor1Gen;
-                    materials[selectedmaterial].TevOrders[buttonID] = Presets.Presets.BaseTevOrder;
-                    materials[selectedmaterial].TexMatrix1[buttonID] = Presets.Presets.BaseTexMatrix;
-                    materials[selectedmaterial].SwapModes[buttonID] = Presets.Presets.BaseSwapMode;
-                    if (buttonID == 0)
-                    {
-                        materials[selectedmaterial].TevStages[buttonID] = Presets.Presets.BaseFirstTevStage;
-                    }
-                    else
-                    {
-                        materials[selectedmaterial].TevStages[buttonID] = Presets.Presets.BaseTevStage;
-                    }
-                    texheader.Add(new TextureHeader { AttachPalette = 0, Name = "New_Texture", Format = TextureFormat.CMPR.ToString(), AlphaSetting = 0, WrapS = TextureWrap.ClampToEdge.ToString(), WrapT = TextureWrap.ClampToEdge.ToString(), MinFilter = TextureMinFilter.Linear.ToString(), MagFilter = TextureMagFilter.Linear.ToString(), MinLod = 0, MaxLod = 0 });
+                    materials[selectedmaterial].TevStages[buttonID] = Presets.Presets.BaseFirstTevStage;
                 }
-                materials[selectedmaterial].Textures[buttonID] = "New_Texture";
+                else
+                {
+                    materials[selectedmaterial].TevStages[buttonID] = Presets.Presets.BaseTevStage;
+                }
+
+                if (CheckTexture())
+                {
+                    if (!returned)
+                    {
+                        return;
+                    }
+                    texheader.Add(new TextureHeader { AttachPalette = 0, Name = "New_Texture"+ texheader.Count, ID = texheader.Count, Format = TextureFormat.CMPR.ToString(), AlphaSetting = 0, WrapS = TextureWrap.ClampToEdge.ToString(), WrapT = TextureWrap.ClampToEdge.ToString(), MinFilter = TextureMinFilter.Linear.ToString(), MagFilter = TextureMagFilter.Linear.ToString(), MinLod = 0, MaxLod = 0 });
+
+                    materials[selectedmaterial].Textures[buttonID].Name = "New_Texture"+ (texheader.Count-1);
+                    materials[selectedmaterial].Textures[buttonID].TextureHeaderID = texheader.Count - 1;
+                    makenew = false;
+
+                    returned = false;
+                }
+                else
+                {
+                    if (!returned)
+                    {
+                        return;
+                    }
+                    materials[selectedmaterial].TextureInfo[buttonID] = texheader[selectedtexheader].Name;
+                    materials[selectedmaterial].Textures[buttonID].Name = texheader[selectedtexheader].Name;
+                    materials[selectedmaterial].Textures[buttonID].TextureHeaderID = texheader[selectedtexheader].ID;
+
+                    returned = false;
+                }
+
             }
-            TextureEditForm TexEditForm = new TextureEditForm(this, materials, texheader, selectedmaterial, buttonID, materials[selectedmaterial].Textures[buttonID]);
+            TextureEditForm TexEditForm = new TextureEditForm(this, materials, texheader, selectedmaterial, buttonID, materials[selectedmaterial].Textures[buttonID].Name);
             TexEditForm.Show();
             Hide();
         }

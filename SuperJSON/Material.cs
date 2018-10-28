@@ -29,7 +29,10 @@ namespace QuickType
         public long NumTevStagesCount { get; set; }
 
         [JsonProperty("Textures")]
-        public string[] Textures { get; set; }
+        public string[] TextureInfo { get; set; }
+
+        [JsonIgnore]
+        public TextureInfo[] Textures { get; set; }
 
         [JsonProperty("IndTexEntry")]
         public IndTexEntry IndTexEntry { get; set; }
@@ -444,6 +447,15 @@ namespace QuickType
 
         [JsonProperty("UpdateEnable")]
         public bool UpdateEnable { get; set; }
+    }
+
+    public partial class TextureInfo
+    {
+        [JsonIgnore]
+        public string Name { get; set; }
+
+        [JsonIgnore]
+        public int TextureHeaderID { get; set; }
     }
 
     public enum AlphaSelElement {

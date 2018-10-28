@@ -61,9 +61,9 @@ namespace SuperJSON
                 {
                     foreach (TextureHeader th in TextureList)
                     {
-                        if (TextureList[SelectedTexture].Name != m.Textures[i] && m.Textures[i] != null && m.Textures[i] == oldname)
+                        if (TextureList[SelectedTexture].Name != m.Textures[i].Name && m.Textures[i].Name != null && m.Textures[i].Name == oldname)
                         {
-                            m.Textures[i] = TextureList[SelectedTexture].Name;
+                            m.Textures[i].Name = TextureList[SelectedTexture].Name;
                             b = true;
                             break;
                         }

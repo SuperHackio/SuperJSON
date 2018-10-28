@@ -11,6 +11,9 @@ namespace QuickType
 
     public partial class TextureHeader
     {
+        [JsonIgnore]
+        public int ID { get; set; }
+
         [JsonProperty("AttachPalette")]
         public int AttachPalette { get; set; }
 

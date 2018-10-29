@@ -11,3 +11,6 @@ SuperJSON edits SuperBMD Materials so you can make your SMS, SMG1/2/ ect. models
 
 # How to get a material .JSON:
 Use SuperBMD Version 1.3.6 or higher to dump the contents of a BMD/BDL model file.
+
+# How do I use this thing?
+Try reading the [SuperJSON Wiki](https://github.com/SuperHackio/SuperJSON/wiki)

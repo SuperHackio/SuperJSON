@@ -75,7 +75,7 @@ namespace SuperJSON
 
         private void FindInButton_Click(object sender, EventArgs e)
         {
-            ofd.Filter = "AutoDesk Filmbox (*.fbx)|*.fbx|COLLAborative Design Activity (*.dae)|*.dae|3ds Max 3DS (*.3ds)|*.3ds|Wavefront Object (*.obj)|*.obj";
+            ofd.Filter = "All Supported Formats (*.fbx *.dae *.3ds *.obj *.stl *.blend *.amf *.ogex *.x *.x3d *.mdc)|*.fbx; *.dae; *.3ds; *.obj; *.stl; *.blend; *.amf; *.ogex; *.x; *.x3d; *.mdc|AutoDesk Filmbox (*.fbx)|*.fbx|COLLAborative Design Activity (*.dae)|*.dae|3ds Max 3DS (*.3ds)|*.3ds|Wavefront Object (*.obj)|*.obj|Stereolithography (*.stl)|*.stl|Blender (*.blend)|.blend|Additive Manufacturing Format (*.amf)|*.amf|Open Game Engine Exchange (*.ogex)|*.ogex|DirectX (*.x)|*.x|X3D (*.x3d)|*.x3d|MDC (*.mdc)|*.mdc";
             ofd.FilterIndex = 1;
             ofd.FileName = "";
             ofd.ShowDialog();

@@ -669,15 +669,57 @@ namespace SuperJSON
             MatListBox.Enabled = false;
             SaveTimer.Start();
             var check = 0;
-            foreach (var item in materials[selectedmaterial].Textures)
+            foreach (string tex in materials[selectedmaterial].TextureInfo)
             {
-                if (item != null)
+                if (tex != null)
                 {
-                    DeleteTexture(check);
+                    foreach (TextureInfo inf in materials[selectedmaterial].Textures)
+                    {
+                        if (tex == inf.Name && inf.TextureHeaderID == texheader[check].ID)
+                        {
+                            DeleteTexture(check);
+                            check++;
+                        }
+                    }
                 }
-                check++;
+                
+            }
+            for (int i = 0; i < texheader.Count; i++)
+            {
+                if (texheader[0] == null)
+                {
+                    texheader.RemoveAt(0);
+                }
+            }
+            var newid = 0;
+            foreach (var newt in texheader)
+            {
+                newt.ID = newid;
+                newid++;
             }
             materials.RemoveAt(selectedmaterial);
+            #region Assign IDs to each texture
+            var IDCount = 0;
+            foreach (TextureHeader t in texheader)
+            {
+                t.ID = IDCount;
+                IDCount++;
+            }
+
+            foreach (Material mat in materials)
+            {
+                foreach (TextureInfo texinfo in mat.Textures)
+                {
+                    foreach (TextureHeader texhead in texheader)
+                    {
+                        if (texhead.Name == texinfo.Name)
+                        {
+                            texinfo.TextureHeaderID = texhead.ID;
+                        }
+                    }
+                }
+            }
+            #endregion
             if (selectedmaterial != 0)
             {
                 selectedmaterial -= 1;
@@ -1203,6 +1245,7 @@ namespace SuperJSON
             materials[selectedmaterial].TexMatrix1[ButtonID] = null;
             materials[selectedmaterial].TevStages[ButtonID] = null;
             materials[selectedmaterial].SwapModes[ButtonID] = null;
+
         }
 
         private void DeleteCheck(int ButtonID)
@@ -1221,7 +1264,7 @@ namespace SuperJSON
             }
             if (count == 0)
             {
-                texheader.RemoveAt(threatenedTexheader);
+                texheader[threatenedTexheader] = null;
             }
 
             materials[selectedmaterial].Textures[ButtonID].Name = null;

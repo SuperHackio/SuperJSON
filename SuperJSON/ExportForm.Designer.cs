@@ -67,6 +67,7 @@
             // 
             // FindInButton
             // 
+            this.FindInButton.Enabled = false;
             this.FindInButton.Location = new System.Drawing.Point(234, 38);
             this.FindInButton.Name = "FindInButton";
             this.FindInButton.Size = new System.Drawing.Size(45, 20);
@@ -77,6 +78,7 @@
             // 
             // InModelTextBox
             // 
+            this.InModelTextBox.Enabled = false;
             this.InModelTextBox.Location = new System.Drawing.Point(86, 39);
             this.InModelTextBox.Name = "InModelTextBox";
             this.InModelTextBox.Size = new System.Drawing.Size(142, 20);
@@ -86,6 +88,7 @@
             // BDLCheckBox
             // 
             this.BDLCheckBox.AutoSize = true;
+            this.BDLCheckBox.Enabled = false;
             this.BDLCheckBox.Location = new System.Drawing.Point(285, 15);
             this.BDLCheckBox.Name = "BDLCheckBox";
             this.BDLCheckBox.Size = new System.Drawing.Size(80, 17);
@@ -123,6 +126,7 @@
             // 
             // FindOutButton
             // 
+            this.FindOutButton.Enabled = false;
             this.FindOutButton.Location = new System.Drawing.Point(234, 64);
             this.FindOutButton.Name = "FindOutButton";
             this.FindOutButton.Size = new System.Drawing.Size(45, 20);
@@ -133,6 +137,7 @@
             // 
             // OutModelTextBox
             // 
+            this.OutModelTextBox.Enabled = false;
             this.OutModelTextBox.Location = new System.Drawing.Point(86, 65);
             this.OutModelTextBox.Name = "OutModelTextBox";
             this.OutModelTextBox.Size = new System.Drawing.Size(142, 20);
@@ -142,6 +147,7 @@
             // FixntCheckBox
             // 
             this.FixntCheckBox.AutoSize = true;
+            this.FixntCheckBox.Enabled = false;
             this.FixntCheckBox.Location = new System.Drawing.Point(285, 67);
             this.FixntCheckBox.Name = "FixntCheckBox";
             this.FixntCheckBox.Size = new System.Drawing.Size(124, 17);
@@ -153,6 +159,7 @@
             // TriStripComboBox
             // 
             this.TriStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TriStripComboBox.Enabled = false;
             this.TriStripComboBox.FormattingEnabled = true;
             this.TriStripComboBox.Location = new System.Drawing.Point(86, 91);
             this.TriStripComboBox.Name = "TriStripComboBox";
@@ -172,6 +179,7 @@
             // NoTextureCheckBox
             // 
             this.NoTextureCheckBox.AutoSize = true;
+            this.NoTextureCheckBox.Enabled = false;
             this.NoTextureCheckBox.Location = new System.Drawing.Point(234, 93);
             this.NoTextureCheckBox.Name = "NoTextureCheckBox";
             this.NoTextureCheckBox.Size = new System.Drawing.Size(170, 17);
@@ -182,6 +190,7 @@
             // 
             // ExportButton
             // 
+            this.ExportButton.Enabled = false;
             this.ExportButton.Location = new System.Drawing.Point(15, 118);
             this.ExportButton.Name = "ExportButton";
             this.ExportButton.Size = new System.Drawing.Size(384, 46);
@@ -193,6 +202,7 @@
             // RotateComboBox
             // 
             this.RotateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RotateComboBox.Enabled = false;
             this.RotateComboBox.FormattingEnabled = true;
             this.RotateComboBox.Items.AddRange(new object[] {
             "Z Axis up",

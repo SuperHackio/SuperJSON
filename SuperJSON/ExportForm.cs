@@ -22,8 +22,11 @@ namespace SuperJSON
         OpenFileDialog ofd = new OpenFileDialog();
         SaveFileDialog sfd = new SaveFileDialog();
         Process cmd;
+        Version SuperBMDVersion = new Version("1.4.0.0"); //Earliest SuperBMD Version compatable with SuperJSON
+        Version CheckVersion;
 
         bool ValidSuperBMD = false;
+        bool InValidSuperBMD = false;
 
         string SuperBMDpath = "";
         string ModelInPath = "";
@@ -56,20 +59,53 @@ namespace SuperJSON
                 cmd.StartInfo.CreateNoWindow = true;
                 cmd.StartInfo.UseShellExecute = false;
                 cmd.Start();
-
-                cmd.StandardInput.WriteLine("\"" + SuperBMDpath + "\"" + " --version 1.3.6");
+                cmd.StandardInput.WriteLine("@Echo off");
+                cmd.StandardInput.WriteLine("\"" + SuperBMDpath + "\"" + " --version");
                 cmd.StandardInput.Flush();
                 cmd.StandardInput.Close();
                 cmd.WaitForExit();
                 var result = cmd.StandardOutput.ReadToEnd();
-                if (!result.Contains("VERSION: True"))
+                if (result.Contains("SuperBMD\r\n"))
                 {
-                    MessageBox.Show("SuperBMD Version 1.3.6 is a requirement for BDL Export and TextureHeader usage. If you don't have 1.3.6 you can still export, but Texture Headers will not be used and you cannot export to BDL.", "Wrong Version alert!");
-                    ValidSuperBMD = false;
+                    string version = result.Substring(result.IndexOf("SuperBMD\r\n"));
+                    version = version.Replace("\r\n","");
+                    version = version.Replace("SuperBMD","");
+                    CheckVersion = new Version(version);
+                    switch (SuperBMDVersion.CompareTo(CheckVersion))
+                    {
+                        case 0:
+                        case -1:
+                            ValidSuperBMD = true;
+                            break;
+                        case 1:
+                            MessageBox.Show("SuperBMD Version "+SuperBMDVersion+ " is a requirement for BDL Export and TextureHeader usage. If you don't have " + SuperBMDVersion + " you can still export, but Texture Headers will not be used and you cannot export to BDL.", "Wrong Version alert!");
+                            ValidSuperBMD = false;
+                            break;
+                    }
+                    InValidSuperBMD = false;
+                }
+                else
+                {
+                    MessageBox.Show("This version of SuperBMD is unsupported.", "Wrong Version alert!");
+                    InValidSuperBMD = true;
                 }
                 SuperBMDTextBox.Text = SuperBMDpath;
-                ValidSuperBMD = true;
                 #endregion
+
+                if (!InValidSuperBMD)
+                {
+                    FindInButton.Enabled = true;
+                }
+                else
+                {
+                    FindOutButton.Enabled = false;
+                    TriStripComboBox.Enabled = false;
+                    RotateComboBox.Enabled = false;
+                    FixntCheckBox.Enabled = false;
+                    BDLCheckBox.Enabled = false;
+                    NoTextureCheckBox.Enabled = false;
+                    ExportButton.Enabled = true;
+                }
             }
         }
 
@@ -82,6 +118,24 @@ namespace SuperJSON
             if (ofd.FileName != "")
             {
                 InModelTextBox.Text = ofd.FileName;
+                FindOutButton.Enabled = true;
+                TriStripComboBox.Enabled = true;
+                RotateComboBox.Enabled = true;
+                FixntCheckBox.Enabled = true;
+
+                if (ValidSuperBMD)
+                {
+                    BDLCheckBox.Enabled = true;
+                    NoTextureCheckBox.Enabled = true;
+                }
+                else
+                {
+                    BDLCheckBox.Enabled = false;
+                    BDLCheckBox.Checked = false;
+                    NoTextureCheckBox.Enabled = false;
+                    NoTextureCheckBox.Checked = false;
+                }
+                ExportButton.Enabled = true;
             }
         }
 

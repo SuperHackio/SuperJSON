@@ -43,6 +43,7 @@ namespace SuperJSON
 
         FileStream fs;
         FileInfo fInfo;
+        FileInfo aInfo;
         FileInfo sInfo;
         Bitmap TexDisplay = Properties.Resources.NoTexture;
         Bitmap resized;
@@ -51,6 +52,7 @@ namespace SuperJSON
         public List<TextureHeader> texheader = new List<TextureHeader>();
         public List<Material> materials;
         List<Material> addingmaterials;
+        List<TextureHeader> addingtexheader = new List<TextureHeader>();
 
         PictureBox[] pictureboxs;
 
@@ -88,7 +90,7 @@ namespace SuperJSON
                 MatListBox.SelectedIndex = 0;
                 MatListBox.Items.Clear();
                 opening = false;
-                LoadJson(false);
+                LoadMatJson(false);
                 MatListBox.Items.Clear();
 
                 foreach (var material in materials)
@@ -114,92 +116,7 @@ namespace SuperJSON
                 }
                 RemoveMatButton.Enabled = materials.Count > 1 ? true : false;
                 //---------------------------------------------------------------------------------------------------------------------------------------
-                var current = 0;
-                bool contains = false;
-                texheader.Clear();
-                if (File.Exists(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 5) + "_tex.json"))
-                {
-                    try
-                    {
-                        using (StreamReader r = new StreamReader(File.OpenRead(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 5) + "_tex.json")))
-                        {
-                            string json = r.ReadToEnd();
-                            texheader = JsonConvert.DeserializeObject<List<TextureHeader>>(json);
-                            r.Close();
-                        }
-                        
-                        foreach (TextureHeader th in texheader)
-                        {
-                            if (th.Format == null)
-                            {
-                                throw new Exception();
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        error = true;
-                        MessageBox.Show("The Texture Header could not be read!", "Malformed JSON");
-                        texheader.Clear();
-                        SetBaseTexHead(current, contains);
-                        error = false;
-                    }
-                    
-                }
-                else if (File.Exists(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 9) + "_texheader.json"))
-                {
-                    try
-                    {
-                        using (StreamReader r = new StreamReader(File.OpenRead(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 9) + "_texheader.json")))
-                        {
-                            string json = r.ReadToEnd();
-                            texheader = JsonConvert.DeserializeObject<List<TextureHeader>>(json);
-                            r.Close();
-                        }
-                        foreach (TextureHeader th in texheader)
-                        {
-                            if (th.Format == null)
-                            {
-                                throw new Exception();
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        error = true;
-                        MessageBox.Show("The Texture Header could not be read!", "Malformed JSON");
-                        texheader.Clear();
-                        SetBaseTexHead(current, contains);
-                        error = false;
-                    }
-                }
-                else
-                {
-                    SetBaseTexHead(current, contains);
-                }
-
-                #region Assign IDs to each texture
-                var IDCount = 0;
-                foreach (TextureHeader t in texheader)
-                {
-                    t.ID = IDCount;
-                    IDCount++;
-                }
-
-                foreach (Material mat in materials)
-                {
-                    foreach (TextureInfo texinfo in mat.Textures)
-                    {
-                        foreach (TextureHeader texhead in texheader)
-                        {
-                            if (texhead.Name == texinfo.Name)
-                            {
-                                texinfo.TextureHeaderID = texhead.ID;
-                            }
-                        }
-                    }
-                }
-                #endregion
+                LoadTexJson();
             }
         }
 
@@ -298,26 +215,48 @@ namespace SuperJSON
         }
 
 
-        private void SetBaseTexHead(int current, bool contains)
+        private void SetBaseTexHead(int current, bool contains, bool add = false)
         {
-            foreach (Material mat in materials)
+            if (!add)
             {
-                foreach (TextureInfo texname in materials[current].Textures)
+                foreach (Material mat in materials)
                 {
-                    if (texheader != null)
+                    foreach (TextureInfo texname in materials[current].Textures)
                     {
-                        contains = texheader.Any(p => p.Name == texname.Name);
+                        if (texheader != null && texheader.Count != 0)
+                        {
+                            contains = texheader.Any(p => p.Name == texname.Name);
+                        }
+                        if (texname.Name != null && !contains)
+                        {
+                            texheader.Add(new TextureHeader { AttachPalette = 0, Name = texname.Name, Format = TextureFormat.CMPR.ToString(), AlphaSetting = 0, WrapS = TextureWrap.ClampToEdge.ToString(), WrapT = TextureWrap.ClampToEdge.ToString(), MinFilter = TextureMinFilter.Linear.ToString(), MagFilter = TextureMagFilter.Linear.ToString(), MinLod = 0, MaxLod = 0 });
+                        }
                     }
-                    if (texname != null && !contains)
-                    {
-                        texheader.Add(new TextureHeader { AttachPalette = 0, Name = texname.Name, Format = TextureFormat.CMPR.ToString(), AlphaSetting = 0, WrapS = TextureWrap.ClampToEdge.ToString(), WrapT = TextureWrap.ClampToEdge.ToString(), MinFilter = TextureMinFilter.Linear.ToString(), MagFilter = TextureMagFilter.Linear.ToString(), MinLod = 0, MaxLod = 0 });
-                    }
+                    current++;
                 }
-                current++;
             }
+            else
+            {
+                foreach (Material mat in addingmaterials)
+                {
+                    foreach (TextureInfo texname in addingmaterials[current].Textures)
+                    {
+                        if (addingtexheader != null)
+                        {
+                            contains = addingtexheader.Any(p => p.Name == texname.Name);
+                        }
+                        if (texname.Name != null && !contains)
+                        {
+                            addingtexheader.Add(new TextureHeader { AttachPalette = 0, Name = texname.Name, Format = TextureFormat.CMPR.ToString(), AlphaSetting = 0, WrapS = TextureWrap.ClampToEdge.ToString(), WrapT = TextureWrap.ClampToEdge.ToString(), MinFilter = TextureMinFilter.Linear.ToString(), MagFilter = TextureMagFilter.Linear.ToString(), MinLod = 0, MaxLod = 0 });
+                        }
+                    }
+                    current++;
+                }
+            }
+            
         }
 
-        public void LoadJson(bool add)
+        public void LoadMatJson(bool add)
         {
             using (StreamReader r = new StreamReader(File.OpenRead(ofd.FileName)))
             {
@@ -361,6 +300,221 @@ namespace SuperJSON
                     }
                 }
                 r.Close();
+            }
+        }
+
+        public void LoadTexJson(bool add = false)
+        {
+            var current = 0;
+            bool contains = false;
+            if (!add)
+            {
+                texheader.Clear();
+                if (File.Exists(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 5) + "_tex.json"))
+                {
+                    try
+                    {
+                        using (StreamReader r = new StreamReader(File.OpenRead(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 5) + "_tex.json")))
+                        {
+                            string json = r.ReadToEnd();
+                            texheader = JsonConvert.DeserializeObject<List<TextureHeader>>(json);
+                            r.Close();
+                        }
+
+                        foreach (TextureHeader th in texheader)
+                        {
+                            if (th.Format == null)
+                            {
+                                throw new Exception();
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        error = true;
+                        MessageBox.Show("The Texture Header could not be read!", "Malformed JSON");
+                        texheader.Clear();
+                        SetBaseTexHead(current, contains);
+                        error = false;
+                    }
+
+                }
+                else if (File.Exists(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 9) + "_texheader.json"))
+                {
+                    try
+                    {
+                        using (StreamReader r = new StreamReader(File.OpenRead(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 9) + "_texheader.json")))
+                        {
+                            string json = r.ReadToEnd();
+                            texheader = JsonConvert.DeserializeObject<List<TextureHeader>>(json);
+                            r.Close();
+                        }
+                        foreach (TextureHeader th in texheader)
+                        {
+                            if (th.Format == null)
+                            {
+                                throw new Exception();
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        error = true;
+                        MessageBox.Show("The Texture Header could not be read!", "Malformed JSON");
+                        texheader.Clear();
+                        SetBaseTexHead(current, contains);
+                        error = false;
+                    }
+                }
+                else
+                {
+                    SetBaseTexHead(current, contains);
+                }
+
+                #region Assign IDs to each texture
+                var IDCount = 0;
+                foreach (TextureHeader t in texheader)
+                {
+                    t.ID = IDCount;
+                    IDCount++;
+                }
+
+                foreach (Material mat in materials)
+                {
+                    foreach (TextureInfo texinfo in mat.Textures)
+                    {
+                        foreach (TextureHeader texhead in texheader)
+                        {
+                            if (texhead.Name == texinfo.Name)
+                            {
+                                texinfo.TextureHeaderID = texhead.ID;
+                            }
+                        }
+                    }
+                }
+                #endregion
+            }
+            else
+            {
+                addingtexheader.Clear();
+                if (File.Exists(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 5) + "_tex.json"))
+                {
+                    try
+                    {
+                        using (StreamReader r = new StreamReader(File.OpenRead(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 5) + "_tex.json")))
+                        {
+                            string json = r.ReadToEnd();
+                            addingtexheader = JsonConvert.DeserializeObject<List<TextureHeader>>(json);
+                            r.Close();
+                        }
+
+                        foreach (TextureHeader th in texheader)
+                        {
+                            if (th.Format == null)
+                            {
+                                throw new Exception();
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        error = true;
+                        MessageBox.Show("The Texture Header could not be read!", "Malformed JSON");
+                        addingtexheader.Clear();
+                        SetBaseTexHead(current, contains, true);
+                        error = false;
+                    }
+
+                }
+                else if (File.Exists(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 9) + "_texheader.json"))
+                {
+                    try
+                    {
+                        using (StreamReader r = new StreamReader(File.OpenRead(fInfo.DirectoryName + "\\" + fInfo.Name.Remove(fInfo.Name.Length - 9) + "_texheader.json")))
+                        {
+                            string json = r.ReadToEnd();
+                            addingtexheader = JsonConvert.DeserializeObject<List<TextureHeader>>(json);
+                            r.Close();
+                        }
+                        foreach (TextureHeader th in texheader)
+                        {
+                            if (th.Format == null)
+                            {
+                                throw new Exception();
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        error = true;
+                        MessageBox.Show("The Texture Header could not be read!", "Malformed JSON");
+                        addingtexheader.Clear();
+                        SetBaseTexHead(current, contains, true);
+                        error = false;
+                    }
+                }
+                else
+                {
+                    SetBaseTexHead(current, contains, true);
+                }
+
+                #region Assign IDs to each texture
+                var IDCount = texheader.Count;
+                foreach (TextureHeader t in addingtexheader)
+                {
+                    t.ID = IDCount;
+                    IDCount++;
+                }
+
+                foreach (Material mat in materials)
+                {
+                    foreach (TextureInfo texinfo in mat.Textures)
+                    {
+                        foreach (TextureHeader texhead in addingtexheader)
+                        {
+                            if (texhead.Name == texinfo.Name)
+                            {
+                                texinfo.TextureHeaderID = texhead.ID;
+                            }
+                        }
+                    }
+                }
+                #endregion
+                texheader.AddRange(addingtexheader);
+                #region Copy All Textures
+                List<string> copyme = new List<string>();
+                foreach (TextureHeader tex in addingtexheader)
+                {
+                    contains = copyme.Any(p => p == tex.Name);
+                    if (tex.Name != null && !contains)
+                    {
+                        copyme.Add(tex.Name);
+                    }
+
+                }
+                CopyImage(copyme, fInfo.DirectoryName);
+                #endregion
+            }
+
+            RemovDuplicateTextures();
+        }
+
+        public void CopyImage(List<string> ImageNames, string OGFilePath)
+        {
+            foreach (string Name in ImageNames)
+            {
+                if (File.Exists(OGFilePath + "\\" + Name + ".png")&&!File.Exists(aInfo.DirectoryName+"\\" + Name + ".png"))
+                {
+                    try
+                    {
+                        File.Copy(OGFilePath + "\\" + Name + ".png", aInfo.DirectoryName + "\\" + Name + ".png", false);
+                    }
+                    catch (Exception)
+                    {
+                        throw new UnauthorizedAccessException("There was an error reading/writing " + Name + ".png");
+                    }
+                    
+                }
             }
         }
 
@@ -654,12 +808,19 @@ namespace SuperJSON
             ofd.ShowDialog();
             if (ofd.FileName != "")
             {
-                LoadJson(true);
+                aInfo = fInfo;
+                fInfo = new FileInfo(ofd.FileName);
+                FilePath = fInfo.DirectoryName;
+                LoadMatJson(true);
                 foreach (var material in addingmaterials)
                 {
                     MatListBox.Items.Add(material.Name);
                 }
                 RemoveMatButton.Enabled = true;
+                //---------------------------------------------------------------------------------------------------------------------------------------
+                LoadTexJson(true);
+                fInfo = aInfo;
+                FilePath = fInfo.DirectoryName;
             }
         }
 
@@ -674,10 +835,13 @@ namespace SuperJSON
                 {
                     foreach (TextureInfo inf in materials[selectedmaterial].Textures)
                     {
-                        if (tex == inf.Name && inf.TextureHeaderID == texheader[check].ID)
+                        for (int i = 0; i < texheader.Count; i++)
                         {
-                            DeleteTexture(check);
-                            check++;
+                            if (texheader[i] != null && (tex == inf.Name && inf.TextureHeaderID == texheader[i].ID))
+                            {
+                                DeleteTexture(check);
+                                check++;
+                            }
                         }
                     }
                 }
@@ -685,16 +849,26 @@ namespace SuperJSON
             }
             for (int i = 0; i < texheader.Count; i++)
             {
-                if (texheader[0] == null)
+                if (texheader[i] == null)
                 {
-                    texheader.RemoveAt(0);
+                    texheader.RemoveAt(i);
                 }
             }
             var newid = 0;
             foreach (var newt in texheader)
             {
-                newt.ID = newid;
+                if (newt != null)
+                {
+                    newt.ID = newid;
+                }
                 newid++;
+            }
+            for (int i = 0; i < texheader.Count; i++)
+            {
+                if (texheader[i] == null)
+                {
+                    texheader.RemoveAt(i);
+                }
             }
             materials.RemoveAt(selectedmaterial);
             #region Assign IDs to each texture
@@ -1235,6 +1409,29 @@ namespace SuperJSON
             return makenew;
         }
 
+        private void RemovDuplicateTextures(int CheckFirst = 0)
+        {
+            for (int j = CheckFirst; j < texheader.Count; j++)
+            {
+                for (int i = texheader.Count-1; i > 0; i--)
+                {
+                    if ((texheader[j].Name == texheader[i].Name) && (texheader[j].ID != texheader[i].ID) && i != j)
+                    {
+                        texheader.RemoveAt(i);
+                    }
+                }
+            }
+            var newid = 0;
+            foreach (var newt in texheader)
+            {
+                if (newt != null)
+                {
+                    newt.ID = newid;
+                }
+                newid++;
+            }
+        }
+
         private void DeleteTexture(int ButtonID)
         {
             DeleteCheck(ButtonID);
@@ -1250,19 +1447,26 @@ namespace SuperJSON
         private void DeleteCheck(int ButtonID)
         {
             int threatenedTexheader = materials[selectedmaterial].Textures[ButtonID].TextureHeaderID;
-            
+
             materials[selectedmaterial].TextureInfo[ButtonID] = null;
-            
+
             var count = -1;
-            foreach (TextureInfo ti in materials[selectedmaterial].Textures)
+            foreach (Material ma in materials)
             {
-                if (ti.TextureHeaderID == threatenedTexheader)
+                foreach (TextureInfo ti in ma.Textures)
                 {
-                    count++;
+                    if (ti.TextureHeaderID == threatenedTexheader)
+                    {
+                        count++;
+                    }
                 }
             }
             if (count == 0)
             {
+                if (threatenedTexheader > texheader.Count-1)
+                {
+                    threatenedTexheader = texheader.Count - 1;
+                }
                 texheader[threatenedTexheader] = null;
             }
 

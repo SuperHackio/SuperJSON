@@ -22,7 +22,7 @@ namespace SuperJSON
             ColInBComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.CombineColorInput));
             ColInCComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.CombineColorInput));
             ColInDComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.CombineColorInput));
-            ColOPComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.Operator));
+            ColOPComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.ColourOperator));
             ColBiasComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.TevBias));
             ColScaleComboBox.DataSource = Enum.GetValues(typeof(TevScale));
             ColRegIDComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.TevRegisterId));
@@ -31,7 +31,7 @@ namespace SuperJSON
             AlphaInBComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.CombineAlphaInput));
             AlphaInCComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.CombineAlphaInput));
             AlphaInDComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.CombineAlphaInput));
-            AlphaOPComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.Operator));
+            AlphaOPComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.AlphaOperator));
             AlphaBiasComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.TevBias));
             AlphaScaleComboBox.DataSource = Enum.GetValues(typeof(TevScale));
             AlphaRegIDComboBox.DataSource = Enum.GetValues(typeof(Presets.Presets.TevRegisterId));
@@ -64,7 +64,8 @@ namespace SuperJSON
 
         Presets.Presets.CombineColorInput colin;
         Presets.Presets.CombineAlphaInput alphin;
-        Presets.Presets.Operator operate;
+        Presets.Presets.ColourOperator Coperate;
+        Presets.Presets.AlphaOperator Aoperate;
         Presets.Presets.TevBias bias;
         TevScale scale;
         Presets.Presets.TevRegisterId regID;
@@ -92,8 +93,8 @@ namespace SuperJSON
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorInC = ColInCComboBox.SelectedItem.ToString();
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorInD = ColInDComboBox.SelectedItem.ToString();
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorOp = ColOPComboBox.SelectedItem.ToString();
-                MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorBias = ColBiasComboBox.SelectedItem.ToString();
-                MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorScale = ColScaleComboBox.SelectedItem.ToString();
+                MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorBias = ColOPComboBox.Enabled ? ColBiasComboBox.SelectedItem.ToString() : "Add";
+                MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorScale = ColScaleComboBox.Enabled ? ColScaleComboBox.SelectedItem.ToString() : "Scale_1";
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorRegId = ColRegIDComboBox.SelectedItem.ToString();
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].ColorClamp = ColClampCheckBox.Checked;
                 //---------------------------------------------------------------------------------------------------------------------------------------
@@ -102,8 +103,8 @@ namespace SuperJSON
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaInC = AlphaInCComboBox.SelectedItem.ToString();
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaInD = AlphaInDComboBox.SelectedItem.ToString();
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaOp = AlphaOPComboBox.SelectedItem.ToString();
-                MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaBias = AlphaBiasComboBox.SelectedItem.ToString();
-                MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaScale = AlphaScaleComboBox.SelectedItem.ToString();
+                MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaBias = AlphaOPComboBox.Enabled ? AlphaBiasComboBox.SelectedItem.ToString() : "Add";
+                MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaScale = AlphaScaleComboBox.Enabled ? AlphaScaleComboBox.SelectedItem.ToString() : "Scale_1";
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaRegId = AlphaRegIDComboBox.SelectedItem.ToString();
                 MaterialList[SelectedMaterial].TevStages[SelectedStage].AlphaClamp = AlphaClampCheckBox.Checked;
                 #endregion
@@ -118,8 +119,8 @@ namespace SuperJSON
             ColInCComboBox.SelectedItem = colin;
             Enum.TryParse<Presets.Presets.CombineColorInput>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorInD, out colin);
             ColInDComboBox.SelectedItem = colin;
-            Enum.TryParse<Presets.Presets.Operator>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorOp, out operate);
-            ColOPComboBox.SelectedItem = operate;
+            Enum.TryParse<Presets.Presets.ColourOperator>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorOp, out Coperate);
+            ColOPComboBox.SelectedItem = Coperate;
             Enum.TryParse<Presets.Presets.TevBias>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorBias, out bias);
             ColBiasComboBox.SelectedItem = bias;
             Enum.TryParse<TevScale>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorScale, out scale);
@@ -138,8 +139,8 @@ namespace SuperJSON
             AlphaInCComboBox.SelectedItem = alphin;
             Enum.TryParse<Presets.Presets.CombineAlphaInput>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaInD, out alphin);
             AlphaInDComboBox.SelectedItem = alphin;
-            Enum.TryParse<Presets.Presets.Operator>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaOp, out operate);
-            AlphaOPComboBox.SelectedItem = operate;
+            Enum.TryParse<Presets.Presets.AlphaOperator>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaOp, out Aoperate);
+            AlphaOPComboBox.SelectedItem = Coperate;
             Enum.TryParse<Presets.Presets.TevBias>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaBias, out bias);
             AlphaBiasComboBox.SelectedItem = bias;
             Enum.TryParse<TevScale>(MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaScale, out scale);
@@ -162,8 +163,8 @@ namespace SuperJSON
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorInC = ColInCComboBox.SelectedItem.ToString();
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorInD = ColInDComboBox.SelectedItem.ToString();
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorOp = ColOPComboBox.SelectedItem.ToString();
-            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorBias = ColBiasComboBox.SelectedItem.ToString();
-            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorScale = ColScaleComboBox.SelectedItem.ToString();
+            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorBias = ColOPComboBox.Enabled ? ColBiasComboBox.SelectedItem.ToString() : "Add";
+            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorScale = ColScaleComboBox.Enabled ? ColScaleComboBox.SelectedItem.ToString() : "Scale_1";
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorRegId = ColRegIDComboBox.SelectedItem.ToString();
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].ColorClamp = ColClampCheckBox.Checked;
             //---------------------------------------------------------------------------------------------------------------------------------------
@@ -172,8 +173,8 @@ namespace SuperJSON
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaInC = AlphaInCComboBox.SelectedItem.ToString();
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaInD = AlphaInDComboBox.SelectedItem.ToString();
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaOp = AlphaOPComboBox.SelectedItem.ToString();
-            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaBias = AlphaBiasComboBox.SelectedItem.ToString();
-            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaScale = AlphaScaleComboBox.SelectedItem.ToString();
+            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaBias = AlphaOPComboBox.Enabled ? AlphaBiasComboBox.SelectedItem.ToString() : "Add";
+            MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaScale = AlphaScaleComboBox.Enabled ? AlphaScaleComboBox.SelectedItem.ToString() : "Scale_1";
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaRegId = AlphaRegIDComboBox.SelectedItem.ToString();
             MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex].AlphaClamp = AlphaClampCheckBox.Checked;
             #endregion
@@ -209,6 +210,34 @@ namespace SuperJSON
                 count++;
             }
             TEVStageIDComboBox.SelectedIndex = SelectedStage-1;
+        }
+
+        private void ColOPComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ColOPComboBox.SelectedIndex >= 2)
+            {
+                ColBiasComboBox.Enabled = false;
+                ColScaleComboBox.Enabled = false;
+            }
+            else
+            {
+                ColBiasComboBox.Enabled = true;
+                ColScaleComboBox.Enabled = true;
+            }
+        }
+
+        private void AlphaOPComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (AlphaOPComboBox.SelectedIndex >= 2)
+            {
+                AlphaBiasComboBox.Enabled = false;
+                AlphaScaleComboBox.Enabled = false;
+            }
+            else
+            {
+                AlphaBiasComboBox.Enabled = true;
+                AlphaScaleComboBox.Enabled = true;
+            }
         }
     }
 }

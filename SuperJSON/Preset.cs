@@ -50,7 +50,9 @@ namespace Presets
             Zero = 7
         }
 
-        public enum Operator { Add, Sub, Comp_R8_GT, Comp_R8_EQ, Comp_GR16_GT, Comp_GR16_EQ, Comp_BGR24_GT, Comp_BGR24_EQ, Comp_RGB8_GT, Comp_RGB8_EQ, Comp_A8_EQ, Comp_A8_GT}
+        public enum ColourOperator { Add, Sub, Comp_R8_GT, Comp_R8_EQ, Comp_GR16_GT, Comp_GR16_EQ, Comp_BGR24_GT, Comp_BGR24_EQ, Comp_RGB8_GT, Comp_RGB8_EQ}
+
+        public enum AlphaOperator { Add, Sub, Comp_A8_EQ, Comp_A8_GT }
 
         public enum TevBias { Zero, AddHalf, SubHalf }
 

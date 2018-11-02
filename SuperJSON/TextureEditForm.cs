@@ -85,9 +85,9 @@ namespace SuperJSON
             TextureList[SelectedTexture].WrapT = WrapTComboBox.SelectedItem.ToString();
             TextureList[SelectedTexture].MinFilter = MinComboBox.SelectedItem.ToString();
             TextureList[SelectedTexture].MagFilter = MagComboBox.SelectedItem.ToString();
-            TextureList[SelectedTexture].MinLod = (int)LODMinNumericUpDown.Value;
-            TextureList[SelectedTexture].MaxLod = (int)LODMagNumericUpDown.Value;
-            TextureList[SelectedTexture].LodBias = (int)LODMinNumericUpDown.Value;
+            TextureList[SelectedTexture].MinLod = LODMinNumericUpDown.Value;
+            TextureList[SelectedTexture].MaxLod = LODMagNumericUpDown.Value;
+            TextureList[SelectedTexture].LodBias = LODMinNumericUpDown.Value;
         }
 
         public void RecalculateImageSize()

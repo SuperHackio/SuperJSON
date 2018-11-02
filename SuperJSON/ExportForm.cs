@@ -160,7 +160,18 @@ namespace SuperJSON
 
         private void TriStripComboBox_SelectedIndexChanged(object sender, EventArgs e) => triopt = (TristripOption)Enum.Parse(typeof(TristripOption), TriStripComboBox.SelectedValue.ToString(), true);
 
-        private void BDLCheckBox_CheckedChanged(object sender, EventArgs e) => makebdl = BDLCheckBox.Checked;
+        private void BDLCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            makebdl = BDLCheckBox.Checked;
+            if (makebdl)
+            {
+                OutModelTextBox.Text = ModelOutPath.Replace(".bmd", ".bdl");
+            }
+            else
+            {
+                OutModelTextBox.Text = ModelOutPath.Replace(".bdl", ".bmd");
+            }
+        }
 
         private void RotateComboBox_SelectedIndexChanged(object sender, EventArgs e) => rotate = RotateComboBox.SelectedIndex == 1;
 

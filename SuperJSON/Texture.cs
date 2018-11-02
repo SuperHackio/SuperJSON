@@ -32,6 +32,18 @@ namespace QuickType
         [JsonProperty("WrapT")]
         public string WrapT { get; set; }
 
+        [JsonProperty("MipMap")]
+        public int MipMap { get; set; }
+
+        [JsonProperty("EdgeLOD")]
+        public bool EdgeLOD { get; set; }
+
+        [JsonProperty("BiasClamp")]
+        public bool BiasClamp { get; set; }
+
+        [JsonProperty("MaxAniso")]
+        public int MaxAniso { get; set; }
+
         [JsonProperty("MinFilter")]
         public string MinFilter { get; set; }
 
@@ -39,13 +51,13 @@ namespace QuickType
         public string MagFilter { get; set; }
 
         [JsonProperty("MinLOD")]
-        public int MinLod { get; set; }
+        public decimal MinLod { get; set; }
 
         [JsonProperty("MaxLOD")]
-        public int MaxLod { get; set; }
+        public decimal MaxLod { get; set; }
 
         [JsonProperty("LodBias")]
-        public int LodBias { get; set; }
+        public decimal LodBias { get; set; }
     }
 
     public enum TextureFormat { I4, I8, IA4, IA8, RGB565, RGB5A3, RGBA32, CMPR }

@@ -292,10 +292,16 @@
             // 
             this.AlphaOPComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.AlphaOPComboBox.FormattingEnabled = true;
+            this.AlphaOPComboBox.Items.AddRange(new object[] {
+            "Add",
+            "Sub",
+            "Comp_A8_GT",
+            "Comp_A8_EQ"});
             this.AlphaOPComboBox.Location = new System.Drawing.Point(77, 127);
             this.AlphaOPComboBox.Name = "AlphaOPComboBox";
             this.AlphaOPComboBox.Size = new System.Drawing.Size(121, 21);
             this.AlphaOPComboBox.TabIndex = 8;
+            this.AlphaOPComboBox.SelectedIndexChanged += new System.EventHandler(this.AlphaOPComboBox_SelectedIndexChanged);
             // 
             // TEVColGroupBox
             // 
@@ -472,10 +478,22 @@
             // 
             this.ColOPComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ColOPComboBox.FormattingEnabled = true;
+            this.ColOPComboBox.Items.AddRange(new object[] {
+            "Add",
+            "Sub",
+            "Com_R8_GT",
+            "Comp_R8_EQ",
+            "Comp_GR16_GT",
+            "Comp_GR16_EQ",
+            "Comp_BGR24_GT",
+            "Comp_BGR24_EQ",
+            "Comp_RGB8_GT",
+            "Comp_RGB8_EQ"});
             this.ColOPComboBox.Location = new System.Drawing.Point(77, 127);
             this.ColOPComboBox.Name = "ColOPComboBox";
             this.ColOPComboBox.Size = new System.Drawing.Size(121, 21);
             this.ColOPComboBox.TabIndex = 8;
+            this.ColOPComboBox.SelectedIndexChanged += new System.EventHandler(this.ColOPComboBox_SelectedIndexChanged);
             // 
             // TEVStageForm
             // 

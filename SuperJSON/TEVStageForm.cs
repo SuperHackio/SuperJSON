@@ -76,12 +76,12 @@ namespace SuperJSON
             {
                 if (TEVStageIDComboBox.SelectedIndex == 0)
                 {
-                    MaterialList[SelectedMaterial].TevStages[0] = Presets.Presets.BaseFirstTevStage;
+                    MaterialList[SelectedMaterial].TevStages[0] = new MaterialTevStage { ColorInA = "Zero", ColorInB = "Zero", ColorInC = "Zero", ColorInD = "TexColor", ColorOp = "Add", ColorBias = "Zero", ColorScale = TevScale.Scale_1.ToString(), ColorClamp = true, ColorRegId = "TevPrev", AlphaInA = "TexAlpha", AlphaInB = "Zero", AlphaInC = "Zero", AlphaInD = "Zero", AlphaOp = "Add", AlphaBias = "Zero", AlphaScale = TevScale.Scale_1.ToString(), AlphaClamp = true, AlphaRegId = "TevPrev" };
                     TEVStageIDComboBox.Items[TEVStageIDComboBox.SelectedIndex] = "TEV Stage 0";
                 }
                 else
                 {
-                    MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex] = Presets.Presets.BaseTevStage;
+                    MaterialList[SelectedMaterial].TevStages[TEVStageIDComboBox.SelectedIndex] = new MaterialTevStage { ColorInA = "Zero", ColorInB = "Texcolor", ColorInC = "ColorPrev", ColorInD = "Zero", ColorOp = "Add", ColorBias = "Zero", ColorScale = TevScale.Scale_1.ToString(), ColorClamp = true, ColorRegId = "TevPrev", AlphaInA = "TexAlpha", AlphaInB = "Zero", AlphaInC = "Zero", AlphaInD = "Zero", AlphaOp = "Add", AlphaBias = "Zero", AlphaScale = TevScale.Scale_1.ToString(), AlphaClamp = true, AlphaRegId = "TevPrev" };
                     TEVStageIDComboBox.Items[TEVStageIDComboBox.SelectedIndex] = "TEV Stage "+ TEVStageIDComboBox.SelectedIndex;
                 }
             }

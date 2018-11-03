@@ -78,6 +78,7 @@
             this.AddMatButton = new System.Windows.Forms.Button();
             this.IndirectSettingsButton = new System.Windows.Forms.Button();
             this.TEVStagesButton = new System.Windows.Forms.Button();
+            this.SwapSettingsButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TEVNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KONSTNumericUpDown)).BeginInit();
             this.MatColGroupBox.SuspendLayout();
@@ -633,11 +634,23 @@
             this.TEVStagesButton.UseVisualStyleBackColor = true;
             this.TEVStagesButton.Click += new System.EventHandler(this.TEVStagesButton_Click);
             // 
+            // SwapSettingsButton
+            // 
+            this.SwapSettingsButton.Enabled = false;
+            this.SwapSettingsButton.Location = new System.Drawing.Point(325, 58);
+            this.SwapSettingsButton.Name = "SwapSettingsButton";
+            this.SwapSettingsButton.Size = new System.Drawing.Size(53, 23);
+            this.SwapSettingsButton.TabIndex = 54;
+            this.SwapSettingsButton.Text = "Swap";
+            this.SwapSettingsButton.UseVisualStyleBackColor = true;
+            this.SwapSettingsButton.Click += new System.EventHandler(this.SwapSettingsButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 373);
+            this.Controls.Add(this.SwapSettingsButton);
             this.Controls.Add(this.TEVStagesButton);
             this.Controls.Add(this.IndirectSettingsButton);
             this.Controls.Add(this.KONSTColGroupBox);
@@ -746,6 +759,7 @@
         private System.Windows.Forms.GroupBox KONSTColGroupBox;
         private System.Windows.Forms.Button IndirectSettingsButton;
         private System.Windows.Forms.Button TEVStagesButton;
+        private System.Windows.Forms.Button SwapSettingsButton;
     }
 }
 

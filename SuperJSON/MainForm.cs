@@ -547,6 +547,7 @@ namespace SuperJSON
             KONSTColTextBox.Enabled = trigger;
             TEVStagesButton.Enabled = trigger;
             IndirectSettingsButton.Enabled = trigger;
+            SwapSettingsButton.Enabled = trigger;
 
             AddMatButton.Enabled = trigger;
             foreach (var picturebox in pictureboxs)
@@ -1441,7 +1442,7 @@ namespace SuperJSON
             materials[selectedmaterial].TexMatrix1[ButtonID] = null;
             materials[selectedmaterial].TevStages[ButtonID] = null;
             materials[selectedmaterial].SwapModes[ButtonID] = null;
-
+            materials[selectedmaterial].SwapTables[ButtonID] = null;
         }
 
         private void DeleteCheck(int ButtonID)
@@ -1479,17 +1480,18 @@ namespace SuperJSON
         {
             if (materials[selectedmaterial].Textures[buttonID].Name == null)
             {
-                materials[selectedmaterial].TexCoord1Gens[buttonID] = Presets.Presets.BaseTexCoor1Gen;
-                materials[selectedmaterial].TevOrders[buttonID] = Presets.Presets.BaseTevOrder;
-                materials[selectedmaterial].TexMatrix1[buttonID] = Presets.Presets.BaseTexMatrix;
-                materials[selectedmaterial].SwapModes[buttonID] = Presets.Presets.BaseSwapMode;
+                materials[selectedmaterial].TexCoord1Gens[buttonID] = materials[selectedmaterial].TexCoord1Gens[buttonID] ?? new TexCoord1Gen { Type = TexGenType.Matrix2x4.ToString(), Source = "Tex0", TexMatrixSource = TexMatrix.Identity.ToString() };
+                materials[selectedmaterial].TevOrders[buttonID] = materials[selectedmaterial].TevOrders[buttonID] ?? new MaterialTevOrder { TexCoord = TexCoord.TexCoord0.ToString(), TexMap = TexMap.TexMap0.ToString(), ChannelId = "color0A0" };
+                materials[selectedmaterial].TexMatrix1[buttonID] = materials[selectedmaterial].TexMatrix1[buttonID] ?? new TexMatrix1 { Projection = "Matrix2x4", Type = 0, EffectTranslation = new double[3] { 0.0, 0.0, 0.0 }, Scale = new double[2] { 0.0, 0.0 }, Rotation = 0.0, Translation = new double[2] { 0.0, 0.0 }, ProjectionMatrix = new double[4][] { new double[4] { 1.0, 0.0, 0.0, 0.0 }, new double[4] { 0.0, 1.0, 0.0, 0.0 }, new double[4] { 0.0, 0.0, 1.0, 0.0 }, new double[4] { 0.0, 0.0, 0.0, 1.0 } } };
+                materials[selectedmaterial].SwapModes[buttonID] = materials[selectedmaterial].SwapModes[buttonID] ?? new SwapMode { RasSel = 0, TexSel = 0 };
+                materials[selectedmaterial].SwapTables[buttonID] = materials[selectedmaterial].SwapTables[buttonID] ?? new SwapTable { R = 0, G = 1, B = 2, A = 3 };
                 if (buttonID == 0)
                 {
-                    materials[selectedmaterial].TevStages[buttonID] = Presets.Presets.BaseFirstTevStage;
+                    materials[selectedmaterial].TevStages[buttonID] = materials[selectedmaterial].TevStages[buttonID] ?? new MaterialTevStage { ColorInA = "Zero", ColorInB = "Zero", ColorInC = "Zero", ColorInD = "TexColor", ColorOp = "Add", ColorBias = "Zero", ColorScale = TevScale.Scale_1.ToString(), ColorClamp = true, ColorRegId = "TevPrev", AlphaInA = "TexAlpha", AlphaInB = "Zero", AlphaInC = "Zero", AlphaInD = "Zero", AlphaOp = "Add", AlphaBias = "Zero", AlphaScale = TevScale.Scale_1.ToString(), AlphaClamp = true, AlphaRegId = "TevPrev" };
                 }
                 else
                 {
-                    materials[selectedmaterial].TevStages[buttonID] = Presets.Presets.BaseTevStage;
+                    materials[selectedmaterial].TevStages[buttonID] = materials[selectedmaterial].TevStages[buttonID] ?? new MaterialTevStage { ColorInA = "Zero", ColorInB = "Texcolor", ColorInC = "ColorPrev", ColorInD = "Zero", ColorOp = "Add", ColorBias = "Zero", ColorScale = TevScale.Scale_1.ToString(), ColorClamp = true, ColorRegId = "TevPrev", AlphaInA = "TexAlpha", AlphaInB = "Zero", AlphaInC = "Zero", AlphaInD = "Zero", AlphaOp = "Add", AlphaBias = "Zero", AlphaScale = TevScale.Scale_1.ToString(), AlphaClamp = true, AlphaRegId = "TevPrev" };
                 }
 
                 if (CheckTexture())
@@ -1558,6 +1560,13 @@ namespace SuperJSON
         {
             TEVStageForm TevForm = new TEVStageForm(this, materials, selectedmaterial);
             TevForm.Show();
+            Hide();
+        }
+
+        private void SwapSettingsButton_Click(object sender, EventArgs e)
+        {
+            SwapTableForm SwapForm = new SwapTableForm(this, selectedmaterial, materials);
+            SwapForm.Show();
             Hide();
         }
     }

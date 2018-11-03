@@ -147,6 +147,8 @@
             // FixntCheckBox
             // 
             this.FixntCheckBox.AutoSize = true;
+            this.FixntCheckBox.Checked = true;
+            this.FixntCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.FixntCheckBox.Enabled = false;
             this.FixntCheckBox.Location = new System.Drawing.Point(285, 67);
             this.FixntCheckBox.Name = "FixntCheckBox";

@@ -87,6 +87,12 @@
     <Compile Include="SelectTextureForm.Designer.cs">
       <DependentUpon>SelectTextureForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SwapTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SwapTableForm.Designer.cs">
+      <DependentUpon>SwapTableForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TEVStageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelectTextureForm.resx">
       <DependentUpon>SelectTextureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SwapTableForm.resx">
+      <DependentUpon>SwapTableForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TEVStageForm.resx">
       <DependentUpon>TEVStageForm.cs</DependentUpon>

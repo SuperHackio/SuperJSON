@@ -5,19 +5,6 @@ namespace Presets
 {
     public class Presets
     {
-        public static double[] BaseEffectTranslation = new double[3] {0.0,0.0,0.0};
-        public static double[] BaseScale = new double[2] { 0.0, 0.0 };
-        public static double[] BaseTranslation = new double[2] { 0.0, 0.0};
-        public static double[][] BaseProjectionMatrix = new double[4][] { new double[4]{ 1.0, 0.0, 0.0, 0.0 }, new double[4] { 0.0, 1.0, 0.0, 0.0 }, new double[4] { 0.0, 0.0, 1.0, 0.0 }, new double[4] { 0.0, 0.0, 0.0, 1.0 } };
-
-        public static TexMatrix1 BaseTexMatrix = new TexMatrix1 { Projection = "Matrix2x4", Type = 0, EffectTranslation = BaseEffectTranslation, Scale = BaseScale, Rotation = 0.0, Translation = BaseTranslation, ProjectionMatrix = BaseProjectionMatrix };
-        public static TexCoord1Gen BaseTexCoor1Gen = new TexCoord1Gen { Type = TexGenType.Matrix2x4.ToString(), Source = "Tex0", TexMatrixSource = TexMatrix.Identity.ToString() };
-        public static MaterialTevOrder BaseTevOrder = new MaterialTevOrder { TexCoord = TexCoord.TexCoord0.ToString(), TexMap = TexMap.TexMap0.ToString(), ChannelId = "color0A0"};
-        public static MaterialTevStage BaseTevStage = new MaterialTevStage { ColorInA = "Zero", ColorInB = "Texcolor", ColorInC = "ColorPrev", ColorInD = "Zero", ColorOp = "Add", ColorBias = "Zero", ColorScale = TevScale.Scale_1.ToString(), ColorClamp = true, ColorRegId = "TevPrev", AlphaInA = "TexAlpha", AlphaInB = "Zero", AlphaInC = "Zero", AlphaInD = "Zero", AlphaOp = "Add", AlphaBias = "Zero", AlphaScale = TevScale.Scale_1.ToString(), AlphaClamp = true, AlphaRegId = "TevPrev" };
-        public static MaterialTevStage BaseFirstTevStage = new MaterialTevStage { ColorInA = "Zero", ColorInB = "Zero", ColorInC = "Zero", ColorInD = "TexColor", ColorOp = "Add", ColorBias = "Zero", ColorScale = TevScale.Scale_1.ToString(), ColorClamp = true, ColorRegId = "TevPrev", AlphaInA = "TexAlpha", AlphaInB = "Zero", AlphaInC = "Zero", AlphaInD = "Zero", AlphaOp = "Add", AlphaBias = "Zero", AlphaScale = TevScale.Scale_1.ToString(), AlphaClamp = true, AlphaRegId = "TevPrev" };
-        public static SwapMode BaseSwapMode = new SwapMode { RasSel= 0, TexSel= 0 };
-
-
         public enum CombineColorInput
         {
             ColorPrev = 0,  // ! < Use Color Value from previous TEV stage

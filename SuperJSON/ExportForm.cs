@@ -214,7 +214,7 @@ namespace SuperJSON
             }
             if (rotate)
                 args += "--rotate ";
-            if (fixnt)
+            if (!fixnt)
                 args += "--dontFix ";
             if (makebdl && ValidSuperBMD)
                 args += "--bdl";

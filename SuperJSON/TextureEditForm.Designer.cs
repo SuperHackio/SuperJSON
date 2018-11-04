@@ -197,15 +197,10 @@
             this.LODMinNumericUpDown.DecimalPlaces = 1;
             this.LODMinNumericUpDown.Location = new System.Drawing.Point(300, 33);
             this.LODMinNumericUpDown.Maximum = new decimal(new int[] {
-            39,
+            255,
             0,
             0,
-            65536});
-            this.LODMinNumericUpDown.Minimum = new decimal(new int[] {
-            40,
-            0,
-            0,
-            -2147418112});
+            0});
             this.LODMinNumericUpDown.Name = "LODMinNumericUpDown";
             this.LODMinNumericUpDown.Size = new System.Drawing.Size(112, 20);
             this.LODMinNumericUpDown.TabIndex = 48;
@@ -224,15 +219,10 @@
             this.LODMagNumericUpDown.DecimalPlaces = 1;
             this.LODMagNumericUpDown.Location = new System.Drawing.Point(300, 60);
             this.LODMagNumericUpDown.Maximum = new decimal(new int[] {
-            39,
+            255,
             0,
             0,
-            65536});
-            this.LODMagNumericUpDown.Minimum = new decimal(new int[] {
-            40,
-            0,
-            0,
-            -2147418112});
+            0});
             this.LODMagNumericUpDown.Name = "LODMagNumericUpDown";
             this.LODMagNumericUpDown.Size = new System.Drawing.Size(112, 20);
             this.LODMagNumericUpDown.TabIndex = 46;

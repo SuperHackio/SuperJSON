@@ -83,14 +83,17 @@ namespace SuperJSON
             ofd.ShowDialog();
             if (ofd.FileName != "")
             {
+                error = false;
                 fInfo = new FileInfo(ofd.FileName);
                 FilePath = fInfo.DirectoryName;
                 opening = true;
                 selectedmaterial = 0;
-                MatListBox.SelectedIndex = 0;
+                //MatListBox.SelectedIndex = 0;
                 MatListBox.Items.Clear();
                 opening = false;
                 LoadMatJson(false);
+                if (error)
+                    return;
                 MatListBox.Items.Clear();
 
                 foreach (var material in materials)
@@ -258,48 +261,56 @@ namespace SuperJSON
 
         public void LoadMatJson(bool add)
         {
-            using (StreamReader r = new StreamReader(File.OpenRead(ofd.FileName)))
+            try
             {
-                string json = r.ReadToEnd();
-                if (add)
+                using (StreamReader r = new StreamReader(File.OpenRead(ofd.FileName)))
                 {
-                    addingmaterials = JsonConvert.DeserializeObject<List<Material>>(json);
-                    foreach (Material mat in addingmaterials)
+                    string json = r.ReadToEnd();
+                    if (add)
                     {
-                        if (mat.NbtScale == null)
+                        addingmaterials = JsonConvert.DeserializeObject<List<Material>>(json);
+                        foreach (Material mat in addingmaterials)
                         {
-                            MessageBox.Show("This is not a Material JSON!", "No U");
-                            addingmaterials.Clear();
-                            return;
+                            if (mat.NbtScale == null)
+                            {
+                                MessageBox.Show("This is not a Material JSON!", "No U");
+                                addingmaterials.Clear();
+                                return;
+                            }
                         }
-                    }
-                    foreach (Material mat in addingmaterials)
-                    {
-                        mat.Textures = new TextureInfo[8];
+                        foreach (Material mat in addingmaterials)
+                        {
+                            mat.Textures = new TextureInfo[8];
 
-                        for (int i = 0; i < 8; i++)
-                        {
-                            mat.Textures[i] = new TextureInfo { Name = null, TextureHeaderID = -1 };
-                            mat.Textures[i].Name = mat.TextureInfo[i];
+                            for (int i = 0; i < 8; i++)
+                            {
+                                mat.Textures[i] = new TextureInfo { Name = null, TextureHeaderID = -1 };
+                                mat.Textures[i].Name = mat.TextureInfo[i];
+                            }
                         }
+                        materials.AddRange(addingmaterials);
                     }
-                    materials.AddRange(addingmaterials);
-                }
-                else
-                {
-                    materials = JsonConvert.DeserializeObject<List<Material>>(json);
-                    foreach (Material mat in materials)
+                    else
                     {
-                        mat.Textures = new TextureInfo[8];
-
-                        for (int i = 0; i < 8; i++)
+                        materials = JsonConvert.DeserializeObject<List<Material>>(json);
+                        foreach (Material mat in materials)
                         {
-                            mat.Textures[i] = new TextureInfo { Name = null, TextureHeaderID = -1 };
-                            mat.Textures[i].Name = mat.TextureInfo[i];
+                            mat.Textures = new TextureInfo[8];
+
+                            for (int i = 0; i < 8; i++)
+                            {
+                                mat.Textures[i] = new TextureInfo { Name = null, TextureHeaderID = -1 };
+                                mat.Textures[i].Name = mat.TextureInfo[i];
+                            }
                         }
                     }
+                    r.Close();
                 }
-                r.Close();
+            }
+            catch (Exception e)
+            {
+                error = true;
+                throw e;
             }
         }
 
@@ -537,10 +548,11 @@ namespace SuperJSON
             AmbColComboBox.Enabled = trigger;
             AmbColButton.Enabled = trigger;
             AmbColTextBox.Enabled = trigger;
-            TEVColComboBox.Enabled = trigger;
-            TEVColButton.Enabled = trigger;
-            TEVNumericUpDown.Enabled = trigger;
-            TEVColTextBox.Enabled = trigger;
+            TEVIDNumericUpDown.Enabled = trigger;
+            TEVRNumericUpDown.Enabled = trigger;
+            TEVGNumericUpDown.Enabled = trigger;
+            TEVBNumericUpDown.Enabled = trigger;
+            TEVANumericUpDown.Enabled = trigger;
             KONSTColComboBox.Enabled = trigger;
             KONSTColButton.Enabled = trigger;
             KONSTNumericUpDown.Enabled = trigger;
@@ -735,17 +747,8 @@ namespace SuperJSON
             //----------------------------------------------------------------
             DitherCheckBox.Checked = materials[selectedmaterial].Dither;
             //----------------------------------------------------------------
-            TEVColComboBox.Items.Clear();
-            var TEVselect = 0;
-            foreach (var TevColour in materials[selectedmaterial].TevColors)
-            {
-                if (TevColour != null)
-                {
-                    TEVColComboBox.Items.Add("Colour " + TEVselect);
-                }
-                TEVselect++;
-            }
-            TEVColComboBox.SelectedIndex = 0;
+            TEVIDNumericUpDown.Value = 1;
+            TEVIDNumericUpDown.Value = 0;
             //----------------------------------------------------------------
             KONSTColComboBox.SelectedIndex = 1;
             KONSTColComboBox.SelectedIndex = 0;
@@ -809,10 +812,13 @@ namespace SuperJSON
             ofd.ShowDialog();
             if (ofd.FileName != "")
             {
+                error = false;
                 aInfo = fInfo;
                 fInfo = new FileInfo(ofd.FileName);
                 FilePath = fInfo.DirectoryName;
                 LoadMatJson(true);
+                if (error)
+                    return;
                 foreach (var material in addingmaterials)
                 {
                     MatListBox.Items.Add(material.Name);
@@ -932,10 +938,10 @@ namespace SuperJSON
             if (clrDialog.ShowDialog() == DialogResult.OK)
             {
                 //save the colour that the user chose
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].R = (double)clrDialog.Color.R / 255;
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].G = (double)clrDialog.Color.G / 255;
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].B = (double)clrDialog.Color.B / 255;
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].A = (double)clrDialog.Color.A / 255;
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].R = Math.Round((double)clrDialog.Color.R / 255, 7);
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].G = Math.Round((double)clrDialog.Color.G / 255, 7);
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].B = Math.Round((double)clrDialog.Color.B / 255, 7);
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].A = Math.Round((double)clrDialog.Color.A / 255, 7);
                 // MessageBox.Show(("Red: "+clrDialog.Color.R).ToString()+" || "+ ((double)clrDialog.Color.R/255).ToString());
                 // MessageBox.Show(("Green: " + clrDialog.Color.G).ToString() + " || " + ((double)clrDialog.Color.G / 255).ToString());
                 //MessageBox.Show(("Blue: " + clrDialog.Color.B).ToString() + " || " + ((double)clrDialog.Color.B / 255).ToString());
@@ -960,6 +966,26 @@ namespace SuperJSON
             materials[selectedmaterial].MaterialColors[1] = null;
             MatColComboBox.Items.RemoveAt(1);
             MatColComboBox.SelectedIndex = 0;
+        }
+        
+        private void MatColTextBox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].R = (double)Convert.ToInt16(MatColTextBox.Text.Substring(0, 2), 16) / 255;
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].G = (double)Convert.ToInt16(MatColTextBox.Text.Substring(2, 2), 16) / 255;
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].B = (double)Convert.ToInt16(MatColTextBox.Text.Substring(4, 2), 16) / 255;
+                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].A = (double)Convert.ToInt16(MatColTextBox.Text.Substring(6, 2), 16) / 255;
+
+                MatColButton.BackColor = System.Drawing.Color.FromArgb((int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].A * 255), (int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].B * 255));
+                MatColTextBox.Text = MatColButton.BackColor.R.ToString("X2") + MatColButton.BackColor.G.ToString("X2") + MatColButton.BackColor.B.ToString("X2") + MatColButton.BackColor.A.ToString("X2");
+                MatColTextBox.BackColor = default(Color);
+            }
+            catch (Exception)
+            {
+                MatColTextBox.BackColor = Color.Red;
+            }
         }
 
         private void AmbColComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1004,55 +1030,22 @@ namespace SuperJSON
             AmbColComboBox.SelectedIndex = 0;
         }
 
-        private void TEVColComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void AmbColTextBox_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                TEVColButton.BackColor = Color.FromArgb((int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].B * 255));
-                TEVNumericUpDown.Value = (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].A * 255);
-                if (TEVNumericUpDown.Value > 255)
-                {
-                    TEVColTextBox.Text = TEVColButton.BackColor.R.ToString("X2") + TEVColButton.BackColor.G.ToString("X2") + TEVColButton.BackColor.B.ToString("X2");
-                }
-                else
-                {
-                    TEVColTextBox.Text = TEVColButton.BackColor.R.ToString("X2") + TEVColButton.BackColor.G.ToString("X2") + TEVColButton.BackColor.B.ToString("X2") + TEVColButton.BackColor.A.ToString("X2");
-                }
-
-                TEVNumericUpDown.Enabled = true;
-                TEVColButton.Enabled = true;
-                TEVColTextBox.Enabled = true;
+                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].R = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(0, 2), 16) / 255;
+                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].G = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(2, 2), 16) / 255;
+                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].B = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(4, 2), 16) / 255;
+                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].A = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(6, 2), 16) / 255;
+                AmbColButton.BackColor = System.Drawing.Color.FromArgb((int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].A * 255), (int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].B * 255));
+                AmbColTextBox.Text = AmbColButton.BackColor.R.ToString("X2") + AmbColButton.BackColor.G.ToString("X2") + AmbColButton.BackColor.B.ToString("X2") + AmbColButton.BackColor.A.ToString("X2");
+                AmbColTextBox.BackColor = default(Color);
             }
             catch (Exception)
             {
-                TEVNumericUpDown.Value = 0;
-                TEVNumericUpDown.Enabled = false;
-                TEVColButton.Enabled = false;
-                TEVColTextBox.Enabled = false;
+                AmbColTextBox.BackColor = Color.Red;
             }
-
-
-        }
-
-        private void TEVColButton_Click(object sender, EventArgs e)
-        {
-            if (clrDialog.ShowDialog() == DialogResult.OK)
-            {
-                //save the colour that the user chose
-                materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].R = (short)(clrDialog.Color.R / 255);
-                materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].G = (short)(clrDialog.Color.G / 255);
-                materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].B = (short)(clrDialog.Color.B / 255);
-                TEVColButton.BackColor = System.Drawing.Color.FromArgb((int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].B * 255));
-                TEVColTextBox.Text = TEVColButton.BackColor.R.ToString("X2") + TEVColButton.BackColor.G.ToString("X2") + TEVColButton.BackColor.B.ToString("X2");
-
-
-            }
-        }
-
-        private void TEVNumericUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].A = (double)TEVNumericUpDown.Value / 255;
-            TEVColTextBox.Text = TEVColButton.BackColor.R.ToString("X2") + TEVColButton.BackColor.G.ToString("X2") + TEVColButton.BackColor.B.ToString("X2");
         }
 
         private void KONSTColComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1082,88 +1075,14 @@ namespace SuperJSON
             KONSTColTextBox.Text = KONSTColButton.BackColor.R.ToString("X2") + KONSTColButton.BackColor.G.ToString("X2") + KONSTColButton.BackColor.B.ToString("X2") + KONSTColButton.BackColor.A.ToString("X2");
         }
 
-        private void MatColTextBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].R = (double)Convert.ToInt16(MatColTextBox.Text.Substring(0, 2), 16) / 255;
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].G = (double)Convert.ToInt16(MatColTextBox.Text.Substring(2, 2), 16) / 255;
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].B = (double)Convert.ToInt16(MatColTextBox.Text.Substring(4, 2), 16) / 255;
-                materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].A = (double)Convert.ToInt16(MatColTextBox.Text.Substring(6, 2), 16) / 255;
-
-                MatColButton.BackColor = System.Drawing.Color.FromArgb((int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].A * 255), (int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].MaterialColors[MatColComboBox.SelectedIndex].B * 255));
-                MatColTextBox.Text = MatColButton.BackColor.R.ToString("X2") + MatColButton.BackColor.G.ToString("X2") + MatColButton.BackColor.B.ToString("X2") + MatColButton.BackColor.A.ToString("X2");
-                MatColTextBox.BackColor = default(Color);
-            }
-            catch (Exception)
-            {
-                MatColTextBox.BackColor = Color.Red;
-            }
-        }
-
-        private void AmbColTextBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].R = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(0, 2), 16) / 255;
-                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].G = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(2, 2), 16) / 255;
-                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].B = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(4, 2), 16) / 255;
-                materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].A = (double)Convert.ToInt16(AmbColTextBox.Text.Substring(6, 2), 16) / 255;
-                AmbColButton.BackColor = System.Drawing.Color.FromArgb((int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].A * 255), (int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].AmbientColors[AmbColComboBox.SelectedIndex].B * 255));
-                AmbColTextBox.Text = AmbColButton.BackColor.R.ToString("X2") + AmbColButton.BackColor.G.ToString("X2") + AmbColButton.BackColor.B.ToString("X2") + AmbColButton.BackColor.A.ToString("X2");
-                AmbColTextBox.BackColor = default(Color);
-            }
-            catch (Exception)
-            {
-                AmbColTextBox.BackColor = Color.Red;
-            }
-        }
-
-        private void TEVColTextBox_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].R = (double)Convert.ToInt16(TEVColTextBox.Text.Substring(0, 2), 16) / 255;
-                materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].G = (double)Convert.ToInt16(TEVColTextBox.Text.Substring(2, 2), 16) / 255;
-                materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].B = (double)Convert.ToInt16(TEVColTextBox.Text.Substring(4, 2), 16) / 255;
-
-                TEVColButton.BackColor = System.Drawing.Color.FromArgb((int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].B * 255));
-                //TEVColTextBox.Text = TEVColButton.BackColor.R.ToString("X2") + TEVColButton.BackColor.G.ToString("X2") + TEVColButton.BackColor.B.ToString("X2");
-                if (TEVColTextBox.Text.Length > 6)
-                {
-                    materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].A = (double)Convert.ToInt16(TEVColTextBox.Text.Substring(6, 2), 16) / 255;
-                    if (materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].A < 1.0f && materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].A > 0.0f)
-                    {
-                        TEVColButton.BackColor = System.Drawing.Color.FromArgb((int)materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].A * 255, (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].TevColors[TEVColComboBox.SelectedIndex].B * 255));
-
-                    }
-                }
-                TEVColTextBox.BackColor = default(Color);
-                TEVNumericUpDown.Value = Convert.ToInt16(TEVColTextBox.Text.Substring(6, 2), 16);
-            }
-            catch (Exception)
-            {
-                if (TEVColTextBox.Text.Length == 6)
-                {
-                    TEVColTextBox.BackColor = default(Color);
-                }
-                else
-                {
-                    TEVColTextBox.BackColor = Color.Red;
-                }
-            }
-
-        }
-
         private void KONSTColTextBox_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].R = (double)Convert.ToInt16(KONSTColTextBox.Text.Substring(0, 2), 16) / 255;
-                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].G = (double)Convert.ToInt16(KONSTColTextBox.Text.Substring(2, 2), 16) / 255;
-                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].B = (double)Convert.ToInt16(KONSTColTextBox.Text.Substring(4, 2), 16) / 255;
-                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].A = (double)Convert.ToInt16(KONSTColTextBox.Text.Substring(6, 2), 16) / 255;
+                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].R = Math.Round((double)Convert.ToInt16(KONSTColTextBox.Text.Substring(0, 2), 16) / 255, 7);
+                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].G = Math.Round((double)Convert.ToInt16(KONSTColTextBox.Text.Substring(2, 2), 16) / 255, 7);
+                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].B = Math.Round((double)Convert.ToInt16(KONSTColTextBox.Text.Substring(4, 2), 16) / 255, 7);
+                materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].A = Math.Round((double)Convert.ToInt16(KONSTColTextBox.Text.Substring(6, 2), 16) / 255, 7);
                 KONSTColButton.BackColor = System.Drawing.Color.FromArgb((int)(materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].A * 255), (int)(materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].R * 255), (int)(materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].G * 255), (int)(materials[selectedmaterial].KonstColors[KONSTColComboBox.SelectedIndex].B * 255));
                 KONSTColTextBox.Text = KONSTColButton.BackColor.R.ToString("X2") + KONSTColButton.BackColor.G.ToString("X2") + KONSTColButton.BackColor.B.ToString("X2") + KONSTColButton.BackColor.A.ToString("X2");
                 KONSTColTextBox.BackColor = default(Color);
@@ -1173,6 +1092,41 @@ namespace SuperJSON
             {
                 KONSTColTextBox.BackColor = Color.Red;
             }
+        }
+
+        //TEV
+        private void TEVIDNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            opening = true;
+            TEVRNumericUpDown.Value = ((decimal)materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].R) * 255;
+            TEVGNumericUpDown.Value = ((decimal)materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].G) * 255;
+            TEVBNumericUpDown.Value = ((decimal)materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].B) * 255;
+            TEVANumericUpDown.Value = ((decimal)materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].A) * 255;
+            opening = false;
+        }
+
+        private void TEVRNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if(!opening)
+            materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].R = ((double)TEVRNumericUpDown.Value / 255);
+        }
+
+        private void TEVGNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (!opening)
+                materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].G = ((double)TEVGNumericUpDown.Value / 255);
+        }
+
+        private void TEVBNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (!opening)
+                materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].B = ((double)TEVBNumericUpDown.Value / 255);
+        }
+
+        private void TEVANumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (!opening)
+                materials[selectedmaterial].TevColors[(int)TEVIDNumericUpDown.Value].A = ((double)TEVANumericUpDown.Value / 255);
         }
 
         #endregion

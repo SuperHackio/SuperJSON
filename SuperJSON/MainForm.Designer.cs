@@ -47,12 +47,10 @@
             this.AmbColButton = new System.Windows.Forms.Button();
             this.AmbColComboBox = new System.Windows.Forms.ComboBox();
             this.ExportButton = new System.Windows.Forms.Button();
-            this.TEVColButton = new System.Windows.Forms.Button();
-            this.TEVColComboBox = new System.Windows.Forms.ComboBox();
             this.KONSTColButton = new System.Windows.Forms.Button();
             this.KONSTColComboBox = new System.Windows.Forms.ComboBox();
             this.KONSTColLabel = new System.Windows.Forms.Label();
-            this.TEVNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.TEVANumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.KONSTNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.MatColGroupBox = new System.Windows.Forms.GroupBox();
             this.MatColTextBox = new System.Windows.Forms.TextBox();
@@ -63,7 +61,11 @@
             this.AddAmbColButton = new System.Windows.Forms.Button();
             this.RemoveAmbColButton = new System.Windows.Forms.Button();
             this.TEVColGroupBox = new System.Windows.Forms.GroupBox();
-            this.TEVColTextBox = new System.Windows.Forms.TextBox();
+            this.TevColLabel = new System.Windows.Forms.Label();
+            this.TEVIDNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.TEVRNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.TEVGNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.TEVBNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.KONSTColTextBox = new System.Windows.Forms.TextBox();
             this.KONSTColGroupBox = new System.Windows.Forms.GroupBox();
             this.Tex8PictureBox = new System.Windows.Forms.PictureBox();
@@ -79,11 +81,15 @@
             this.IndirectSettingsButton = new System.Windows.Forms.Button();
             this.TEVStagesButton = new System.Windows.Forms.Button();
             this.SwapSettingsButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.TEVNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVANumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KONSTNumericUpDown)).BeginInit();
             this.MatColGroupBox.SuspendLayout();
             this.AmbColGroupBox.SuspendLayout();
             this.TEVColGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVIDNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVRNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVGNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVBNumericUpDown)).BeginInit();
             this.KONSTColGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tex8PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Tex7PictureBox)).BeginInit();
@@ -260,27 +266,6 @@
             this.ExportButton.UseVisualStyleBackColor = true;
             this.ExportButton.Click += new System.EventHandler(this.ExportButton_Click);
             // 
-            // TEVColButton
-            // 
-            this.TEVColButton.Enabled = false;
-            this.TEVColButton.Location = new System.Drawing.Point(77, 19);
-            this.TEVColButton.Name = "TEVColButton";
-            this.TEVColButton.Size = new System.Drawing.Size(21, 21);
-            this.TEVColButton.TabIndex = 42;
-            this.TEVColButton.UseVisualStyleBackColor = true;
-            this.TEVColButton.Click += new System.EventHandler(this.TEVColButton_Click);
-            // 
-            // TEVColComboBox
-            // 
-            this.TEVColComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.TEVColComboBox.Enabled = false;
-            this.TEVColComboBox.FormattingEnabled = true;
-            this.TEVColComboBox.Location = new System.Drawing.Point(6, 19);
-            this.TEVColComboBox.Name = "TEVColComboBox";
-            this.TEVColComboBox.Size = new System.Drawing.Size(65, 21);
-            this.TEVColComboBox.TabIndex = 41;
-            this.TEVColComboBox.SelectedIndexChanged += new System.EventHandler(this.TEVColComboBox_SelectedIndexChanged);
-            // 
             // KONSTColButton
             // 
             this.KONSTColButton.Enabled = false;
@@ -316,19 +301,29 @@
             this.KONSTColLabel.TabIndex = 43;
             this.KONSTColLabel.Text = ":";
             // 
-            // TEVNumericUpDown
+            // TEVANumericUpDown
             // 
-            this.TEVNumericUpDown.Enabled = false;
-            this.TEVNumericUpDown.Location = new System.Drawing.Point(104, 20);
-            this.TEVNumericUpDown.Maximum = new decimal(new int[] {
-            900,
+            this.TEVANumericUpDown.Enabled = false;
+            this.TEVANumericUpDown.Location = new System.Drawing.Point(179, 32);
+            this.TEVANumericUpDown.Maximum = new decimal(new int[] {
+            1023,
             0,
             0,
             0});
-            this.TEVNumericUpDown.Name = "TEVNumericUpDown";
-            this.TEVNumericUpDown.Size = new System.Drawing.Size(38, 20);
-            this.TEVNumericUpDown.TabIndex = 46;
-            this.TEVNumericUpDown.ValueChanged += new System.EventHandler(this.TEVNumericUpDown_ValueChanged);
+            this.TEVANumericUpDown.Minimum = new decimal(new int[] {
+            10240,
+            0,
+            0,
+            -2147418112});
+            this.TEVANumericUpDown.Name = "TEVANumericUpDown";
+            this.TEVANumericUpDown.Size = new System.Drawing.Size(38, 20);
+            this.TEVANumericUpDown.TabIndex = 46;
+            this.TEVANumericUpDown.Value = new decimal(new int[] {
+            203,
+            0,
+            0,
+            0});
+            this.TEVANumericUpDown.ValueChanged += new System.EventHandler(this.TEVANumericUpDown_ValueChanged);
             // 
             // KONSTNumericUpDown
             // 
@@ -440,27 +435,118 @@
             // 
             // TEVColGroupBox
             // 
-            this.TEVColGroupBox.Controls.Add(this.TEVColTextBox);
-            this.TEVColGroupBox.Controls.Add(this.TEVColComboBox);
-            this.TEVColGroupBox.Controls.Add(this.TEVNumericUpDown);
-            this.TEVColGroupBox.Controls.Add(this.TEVColButton);
+            this.TEVColGroupBox.Controls.Add(this.TevColLabel);
+            this.TEVColGroupBox.Controls.Add(this.TEVIDNumericUpDown);
+            this.TEVColGroupBox.Controls.Add(this.TEVRNumericUpDown);
+            this.TEVColGroupBox.Controls.Add(this.TEVGNumericUpDown);
+            this.TEVColGroupBox.Controls.Add(this.TEVBNumericUpDown);
+            this.TEVColGroupBox.Controls.Add(this.TEVANumericUpDown);
             this.TEVColGroupBox.Location = new System.Drawing.Point(142, 203);
             this.TEVColGroupBox.Name = "TEVColGroupBox";
-            this.TEVColGroupBox.Size = new System.Drawing.Size(224, 54);
+            this.TEVColGroupBox.Size = new System.Drawing.Size(224, 64);
             this.TEVColGroupBox.TabIndex = 50;
             this.TEVColGroupBox.TabStop = false;
             this.TEVColGroupBox.Text = "TEV Colours";
             // 
-            // TEVColTextBox
+            // TevColLabel
             // 
-            this.TEVColTextBox.Enabled = false;
-            this.TEVColTextBox.Location = new System.Drawing.Point(148, 20);
-            this.TEVColTextBox.MaxLength = 8;
-            this.TEVColTextBox.Name = "TEVColTextBox";
-            this.TEVColTextBox.Size = new System.Drawing.Size(70, 20);
-            this.TEVColTextBox.TabIndex = 30;
-            this.TEVColTextBox.Text = "RRGGBBAA";
-            this.TEVColTextBox.TextChanged += new System.EventHandler(this.TEVColTextBox_TextChanged);
+            this.TevColLabel.AutoSize = true;
+            this.TevColLabel.Location = new System.Drawing.Point(6, 16);
+            this.TevColLabel.Name = "TevColLabel";
+            this.TevColLabel.Size = new System.Drawing.Size(211, 13);
+            this.TevColLabel.TabIndex = 51;
+            this.TevColLabel.Text = "  ID      RED       GREEN    BLUE    ALPHA";
+            // 
+            // TEVIDNumericUpDown
+            // 
+            this.TEVIDNumericUpDown.Enabled = false;
+            this.TEVIDNumericUpDown.Location = new System.Drawing.Point(5, 32);
+            this.TEVIDNumericUpDown.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.TEVIDNumericUpDown.Name = "TEVIDNumericUpDown";
+            this.TEVIDNumericUpDown.Size = new System.Drawing.Size(28, 20);
+            this.TEVIDNumericUpDown.TabIndex = 50;
+            this.TEVIDNumericUpDown.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.TEVIDNumericUpDown.ValueChanged += new System.EventHandler(this.TEVIDNumericUpDown_ValueChanged);
+            // 
+            // TEVRNumericUpDown
+            // 
+            this.TEVRNumericUpDown.Enabled = false;
+            this.TEVRNumericUpDown.Location = new System.Drawing.Point(39, 32);
+            this.TEVRNumericUpDown.Maximum = new decimal(new int[] {
+            1023,
+            0,
+            0,
+            0});
+            this.TEVRNumericUpDown.Minimum = new decimal(new int[] {
+            10240,
+            0,
+            0,
+            -2147418112});
+            this.TEVRNumericUpDown.Name = "TEVRNumericUpDown";
+            this.TEVRNumericUpDown.Size = new System.Drawing.Size(41, 20);
+            this.TEVRNumericUpDown.TabIndex = 49;
+            this.TEVRNumericUpDown.Value = new decimal(new int[] {
+            1023,
+            0,
+            0,
+            0});
+            this.TEVRNumericUpDown.ValueChanged += new System.EventHandler(this.TEVRNumericUpDown_ValueChanged);
+            // 
+            // TEVGNumericUpDown
+            // 
+            this.TEVGNumericUpDown.Enabled = false;
+            this.TEVGNumericUpDown.Location = new System.Drawing.Point(86, 32);
+            this.TEVGNumericUpDown.Maximum = new decimal(new int[] {
+            1023,
+            0,
+            0,
+            0});
+            this.TEVGNumericUpDown.Minimum = new decimal(new int[] {
+            10240,
+            0,
+            0,
+            -2147418112});
+            this.TEVGNumericUpDown.Name = "TEVGNumericUpDown";
+            this.TEVGNumericUpDown.Size = new System.Drawing.Size(41, 20);
+            this.TEVGNumericUpDown.TabIndex = 48;
+            this.TEVGNumericUpDown.Value = new decimal(new int[] {
+            1023,
+            0,
+            0,
+            0});
+            this.TEVGNumericUpDown.ValueChanged += new System.EventHandler(this.TEVGNumericUpDown_ValueChanged);
+            // 
+            // TEVBNumericUpDown
+            // 
+            this.TEVBNumericUpDown.Enabled = false;
+            this.TEVBNumericUpDown.Location = new System.Drawing.Point(133, 32);
+            this.TEVBNumericUpDown.Maximum = new decimal(new int[] {
+            1023,
+            0,
+            0,
+            0});
+            this.TEVBNumericUpDown.Minimum = new decimal(new int[] {
+            10240,
+            0,
+            0,
+            -2147418112});
+            this.TEVBNumericUpDown.Name = "TEVBNumericUpDown";
+            this.TEVBNumericUpDown.Size = new System.Drawing.Size(40, 20);
+            this.TEVBNumericUpDown.TabIndex = 47;
+            this.TEVBNumericUpDown.Value = new decimal(new int[] {
+            1023,
+            0,
+            0,
+            0});
+            this.TEVBNumericUpDown.ValueChanged += new System.EventHandler(this.TEVBNumericUpDown_ValueChanged);
             // 
             // KONSTColTextBox
             // 
@@ -479,7 +565,7 @@
             this.KONSTColGroupBox.Controls.Add(this.KONSTColComboBox);
             this.KONSTColGroupBox.Controls.Add(this.KONSTNumericUpDown);
             this.KONSTColGroupBox.Controls.Add(this.KONSTColButton);
-            this.KONSTColGroupBox.Location = new System.Drawing.Point(142, 263);
+            this.KONSTColGroupBox.Location = new System.Drawing.Point(142, 273);
             this.KONSTColGroupBox.Name = "KONSTColGroupBox";
             this.KONSTColGroupBox.Size = new System.Drawing.Size(224, 54);
             this.KONSTColGroupBox.TabIndex = 51;
@@ -686,7 +772,7 @@
             this.Name = "MainForm";
             this.Text = "SuperJSON";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            ((System.ComponentModel.ISupportInitialize)(this.TEVNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVANumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KONSTNumericUpDown)).EndInit();
             this.MatColGroupBox.ResumeLayout(false);
             this.MatColGroupBox.PerformLayout();
@@ -694,6 +780,10 @@
             this.AmbColGroupBox.PerformLayout();
             this.TEVColGroupBox.ResumeLayout(false);
             this.TEVColGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVIDNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVRNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVGNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.TEVBNumericUpDown)).EndInit();
             this.KONSTColGroupBox.ResumeLayout(false);
             this.KONSTColGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tex8PictureBox)).EndInit();
@@ -742,24 +832,26 @@
         private System.Windows.Forms.PictureBox Tex5PictureBox;
         private System.Windows.Forms.PictureBox Tex8PictureBox;
         private System.Windows.Forms.PictureBox Tex7PictureBox;
-        private System.Windows.Forms.Button TEVColButton;
-        private System.Windows.Forms.ComboBox TEVColComboBox;
         private System.Windows.Forms.Button KONSTColButton;
         private System.Windows.Forms.ComboBox KONSTColComboBox;
         private System.Windows.Forms.Label KONSTColLabel;
-        private System.Windows.Forms.NumericUpDown TEVNumericUpDown;
+        private System.Windows.Forms.NumericUpDown TEVANumericUpDown;
         private System.Windows.Forms.NumericUpDown KONSTNumericUpDown;
         private System.Windows.Forms.GroupBox MatColGroupBox;
         private System.Windows.Forms.TextBox MatColTextBox;
         private System.Windows.Forms.GroupBox AmbColGroupBox;
         private System.Windows.Forms.TextBox AmbColTextBox;
         private System.Windows.Forms.GroupBox TEVColGroupBox;
-        private System.Windows.Forms.TextBox TEVColTextBox;
         private System.Windows.Forms.TextBox KONSTColTextBox;
         private System.Windows.Forms.GroupBox KONSTColGroupBox;
         private System.Windows.Forms.Button IndirectSettingsButton;
         private System.Windows.Forms.Button TEVStagesButton;
         private System.Windows.Forms.Button SwapSettingsButton;
+        private System.Windows.Forms.NumericUpDown TEVIDNumericUpDown;
+        private System.Windows.Forms.NumericUpDown TEVRNumericUpDown;
+        private System.Windows.Forms.NumericUpDown TEVGNumericUpDown;
+        private System.Windows.Forms.NumericUpDown TEVBNumericUpDown;
+        private System.Windows.Forms.Label TevColLabel;
     }
 }
 

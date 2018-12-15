@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using QuickType;
+using DiscordRichPresence;
 
 namespace SuperJSON
 {
@@ -35,6 +36,8 @@ namespace SuperJSON
             MatListBox.Items.Add("     -The Sunshine Hut");
             pictureboxs = new PictureBox[8] { Tex1PictureBox, Tex2PictureBox, Tex3PictureBox, Tex4PictureBox, Tex5PictureBox, Tex6PictureBox, Tex7PictureBox, Tex8PictureBox };
         }
+        DRPC RP = new DRPC();
+
 
         OpenFileDialog ofd = new OpenFileDialog();
         SaveFileDialog sfd = new SaveFileDialog();
@@ -70,6 +73,7 @@ namespace SuperJSON
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            RP.Initialize();
         }
 
         private void OpenButton_Click(object sender, EventArgs e)
@@ -120,6 +124,7 @@ namespace SuperJSON
                 RemoveMatButton.Enabled = materials.Count > 1 ? true : false;
                 //---------------------------------------------------------------------------------------------------------------------------------------
                 LoadTexJson();
+                RP.Update(MessageB:"Editing Materials");
             }
         }
 
@@ -209,12 +214,14 @@ namespace SuperJSON
             #endregion
             
             working = true;
+            RP.Update(MessageB:"Exporting Materials");
             new ExportForm(jsonpath,textpath).ShowDialog();
             MatListBox.SelectedIndex = 0;
             
             //END
             SetAppStatus(true);
             ReloadImages();
+            RP.Update(MessageB: "Editing Materials");
         }
 
 

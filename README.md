@@ -2,7 +2,6 @@
 SuperJSON - SuperBMD Material Editor
 
 It's all done with a GUI (Graphical User Intereface)
-The GUI is pretty user friendly, but if you need help, you can ask me on Discord: https://discord.gg/9JRaaem
 
 This program would not be possible without the following helping hands: @Gamma, @RenolY2, Riidefi, and SY24.
 
